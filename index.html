@@ -18,10 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
     <style>
         /* 修复样式块，移除错误的JS代码 */
-        justify-content: center;
-        align-items: center;
-        padding: 18px;
-        }
+        /* 这里原本有无效的 CSS 代码，已移除 */
 
         /* 主容器 - 精致卡片手机风格 */
         .app-container {
@@ -711,7 +708,9 @@
             }
 
             try {
+                // 优先使用 rediduck.github.io 的 GeoJSON
                 const geojsonUrls = [
+                    "https://rediduck.github.io/assets/geo/100000_full.json",
                     "https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json",
                     "https://geo.datav.aliyun.com/areas/bound/100000_full.json"
                 ];
@@ -729,7 +728,6 @@
             } catch (_) {
                 return false;
             }
-
             return false;
         }
 
@@ -740,91 +738,81 @@
             const mapReady = await ensureChinaMapReady();
             if (!mapReady) {
                 mapEl.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#7a4a37;font-size:13px;text-align:center;padding:16px;">地图资源加载失败，请检查网络后刷新页面</div>';
-                try {
-                    // 优先使用 rediduck.github.io 的 GeoJSON
-                    const geojsonUrls = [
-                        "https://rediduck.github.io/assets/geo/100000_full.json",
-                        "https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json",
-                        "https://geo.datav.aliyun.com/areas/bound/100000_full.json"
-                    ];
-                    for (const geoUrl of geojsonUrls) {
-                        try {
-                            const resp = await fetch(geoUrl);
-                            if (!resp.ok) continue;
-                            const geoJson = await resp.json();
-                            echarts.registerMap("china", geoJson);
-                            return true;
-                        } catch (_) {
-                            // 当前地址失败，继续尝试
-                        }
-                    }
-                } catch (_) {
-                    return false;
-                }
-                return false;
-                zoom: 1.1,
+                return;
+            }
+
+            chinaMapChart = echarts.init(mapEl);
+            chinaMapOption = {
+                tooltip: {
+                    trigger: "item",
+                    backgroundColor: "rgba(35, 53, 78, 0.92)",
+                    borderColor: "rgba(255,255,255,0.2)",
+                    textStyle: { color: "#fff", fontSize: 12 },
+                },
+                geo: {
+                    zoom: 1.1,
                     scaleLimit: { min: 1, max: 6 },
-                itemStyle: {
-                    areaColor: "#ffd9bf",
-                        borderColor: "#ffffff",
-                            borderWidth: 1
-                },
-                emphasis: {
                     itemStyle: {
-                        areaColor: "#ff8f5a"
+                        areaColor: "#ffd9bf",
+                        borderColor: "#ffffff",
+                        borderWidth: 1
                     },
-                    label: {
-                        color: "#fff",
+                    emphasis: {
+                        itemStyle: {
+                            areaColor: "#ff8f5a"
+                        },
+                        label: {
+                            color: "#fff",
                             fontWeight: 700
+                        }
+                    },
+                    select: {
+                        itemStyle: {
+                            areaColor: "#2f5f9c"
+                        },
+                        label: { color: "#fff" }
                     }
                 },
-                select: {
-                    itemStyle: {
-                        areaColor: "#2f5f9c"
-                    },
-                    label: { color: "#fff" }
-                }
-            },
-            series: [
-                {
-                    type: "map",
-                    map: "china",
-                    geoIndex: 0,
-                    selectedMode: "single",
-                    data: provincesData.map(item => ({
-                        name: item.name,
-                        value: Math.floor(Math.random() * 60) + 40,
-                        itemStyle: {
-                            areaColor: provincePalette[item.name] || "#ffd9bf"
-                        }
-                    }))
-                }
-            ]
-        };
+                series: [
+                    {
+                        type: "map",
+                        map: "china",
+                        geoIndex: 0,
+                        selectedMode: "single",
+                        data: provincesData.map(item => ({
+                            name: item.name,
+                            value: Math.floor(Math.random() * 60) + 40,
+                            itemStyle: {
+                                areaColor: provincePalette[item.name] || "#ffd9bf"
+                            }
+                        }))
+                    }
+                ]
+            };
 
-        chinaMapChart.setOption(chinaMapOption);
-        chinaMapChart.on("click", (params) => {
-            if (!params || !params.name) return;
-            const selectedText = document.getElementById("mapSelectedText");
-            const province = findProvinceData(params.name);
-            selectedText.innerText = `已选择 ${province.emoji} ${province.name} · ${province.specialty} · ${province.desc}`;
-            showProvinceDetail(province);
-        });
-
-        const resetBtn = document.getElementById("resetMapBtn");
-        if (resetBtn) {
-            resetBtn.addEventListener("click", () => {
-                if (!chinaMapChart || !chinaMapOption) return;
-                chinaMapChart.clear();
-                chinaMapChart.setOption(chinaMapOption, true);
+            chinaMapChart.setOption(chinaMapOption);
+            chinaMapChart.on("click", (params) => {
+                if (!params || !params.name) return;
                 const selectedText = document.getElementById("mapSelectedText");
-                selectedText.innerText = "当前未选择省份，先去地图上点一点吧。";
+                const province = findProvinceData(params.name);
+                selectedText.innerText = `已选择 ${province.emoji} ${province.name} · ${province.specialty} · ${province.desc}`;
+                showProvinceDetail(province);
             });
-        }
 
-        window.addEventListener("resize", () => {
-            if (chinaMapChart) chinaMapChart.resize();
-        });
+            const resetBtn = document.getElementById("resetMapBtn");
+            if (resetBtn) {
+                resetBtn.addEventListener("click", () => {
+                    if (!chinaMapChart || !chinaMapOption) return;
+                    chinaMapChart.clear();
+                    chinaMapChart.setOption(chinaMapOption, true);
+                    const selectedText = document.getElementById("mapSelectedText");
+                    selectedText.innerText = "当前未选择省份，先去地图上点一点吧。";
+                });
+            }
+
+            window.addEventListener("resize", () => {
+                if (chinaMapChart) chinaMapChart.resize();
+            });
         }
 
         // 排行榜数据(根据热度动态模拟，让每次刷新不一样)
