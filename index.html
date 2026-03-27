@@ -890,7 +890,10 @@
         // 盲盒渲染及开盒效果
         function renderBlindbox() {
             const blindContainer = document.getElementById("blindboxContainer");
-            blindContainer.innerHTML = provincesData.map(prov => `
+            // 随机抽取12个省份
+            const shuffled = [...provincesData].sort(() => Math.random() - 0.5);
+            const selected = shuffled.slice(0, 12);
+            blindContainer.innerHTML = selected.map(prov => `
             <div class="blind-item" data-province="${prov.name}" data-emoji="${prov.emoji}" data-desc="${prov.desc}">
                 <div class="blind-face blind-front">
                     <div class="blind-icon">🎴</div>
