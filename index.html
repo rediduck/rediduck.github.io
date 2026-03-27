@@ -708,17 +708,16 @@
             }
 
             try {
-                // 优先使用 rediduck.github.io 的 GeoJSON
+                // 只使用 rediduck.github.io 的 GeoJSON
                 const geojsonUrls = [
-                    "https://rediduck.github.io/assets/geo/100000_full.json",
-                    "https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json",
-                    "https://geo.datav.aliyun.com/areas/bound/100000_full.json"
+                    "https://rediduck.github.io/assets/geo/100000_full.json"
                 ];
                 for (const geoUrl of geojsonUrls) {
                     try {
                         const resp = await fetch(geoUrl);
                         if (!resp.ok) continue;
                         const geoJson = await resp.json();
+                        console.log(geoJson);
                         echarts.registerMap("china", geoJson);
                         return true;
                     } catch (_) {
@@ -749,36 +748,34 @@
                     borderColor: "rgba(255,255,255,0.2)",
                     textStyle: { color: "#fff", fontSize: 12 },
                 },
-                geo: {
-                    zoom: 1.1,
-                    scaleLimit: { min: 1, max: 6 },
-                    itemStyle: {
-                        areaColor: "#ffd9bf",
-                        borderColor: "#ffffff",
-                        borderWidth: 1
-                    },
-                    emphasis: {
-                        itemStyle: {
-                            areaColor: "#ff8f5a"
-                        },
-                        label: {
-                            color: "#fff",
-                            fontWeight: 700
-                        }
-                    },
-                    select: {
-                        itemStyle: {
-                            areaColor: "#2f5f9c"
-                        },
-                        label: { color: "#fff" }
-                    }
-                },
                 series: [
                     {
                         type: "map",
                         map: "china",
-                        geoIndex: 0,
                         selectedMode: "single",
+                        roam: true,
+                        zoom: 1.1,
+                        scaleLimit: { min: 1, max: 6 },
+                        itemStyle: {
+                            areaColor: "#ffd9bf",
+                            borderColor: "#ffffff",
+                            borderWidth: 1
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                areaColor: "#ff8f5a"
+                            },
+                            label: {
+                                color: "#fff",
+                                fontWeight: 700
+                            }
+                        },
+                        select: {
+                            itemStyle: {
+                                areaColor: "#2f5f9c"
+                            },
+                            label: { color: "#fff" }
+                        },
                         data: provincesData.map(item => ({
                             name: item.name,
                             value: Math.floor(Math.random() * 60) + 40,
