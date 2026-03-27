@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>文旅盲盒 · 漫游中国</title>
+    <title>文旅盲盒 · 漫游安徽</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -135,7 +135,7 @@
             margin-top: 4px;
         }
 
-        /* 首页中国地图交互区 */
+        /* 首页安徽地图交互区 */
         .map-stage {
             margin: 18px 0 22px;
             border-radius: 34px;
@@ -176,7 +176,7 @@
             box-shadow: 0 8px 14px rgba(255, 122, 69, 0.28);
         }
 
-        #chinaMapCanvas {
+        #anhuiMapCanvas {
             width: 100%;
             height: 340px;
             border-radius: 24px;
@@ -194,7 +194,7 @@
         }
 
         @media (max-width: 480px) {
-            #chinaMapCanvas {
+            #anhuiMapCanvas {
                 height: 300px;
             }
         }
@@ -514,23 +514,23 @@
             <!-- 滑动节假日活动 swiper -->
             <div class="swiper-container swiper-holiday">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">🌸 婺源花海节 · 春日限定</div>
-                    <div class="swiper-slide">🏮 端午汨罗江 · 龙舟竞渡</div>
-                    <div class="swiper-slide">⛰️ 贵州避暑季 · 六盘水凉都</div>
-                    <div class="swiper-slide">🍁 额济纳旗 · 金秋胡杨林</div>
-                    <div class="swiper-slide">❄️ 哈尔滨冰雪大世界 · 冬日童话</div>
+                    <div class="swiper-slide">🌸 黄山迎客松节 · 春日限定</div>
+                    <div class="swiper-slide">🏮 合肥庐州灯会 · 灯火璀璨</div>
+                    <div class="swiper-slide">🎡 芜湖方特狂欢节 · 欢乐无限</div>
+                    <div class="swiper-slide">🍁 九华山祈福季 · 金秋祈愿</div>
+                    <div class="swiper-slide">❄️ 天柱山雪景节 · 冬日仙境</div>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
 
-            <!-- 地图区：可拖动中国地图 -->
+            <!-- 地图区：可拖动安徽地图 -->
             <div class="map-stage">
                 <div class="map-toolbar">
-                    <div class="map-tip">拖动或缩放地图，点击省份查看盲盒攻略</div>
+                    <div class="map-tip">拖动或缩放地图，点击市区查看盲盒攻略</div>
                     <button class="map-reset-btn" id="resetMapBtn">重置视图</button>
                 </div>
-                <div id="chinaMapCanvas"></div>
-                <div class="map-selected" id="mapSelectedText">当前未选择省份，先去地图上点一点吧。</div>
+                <div id="anhuiMapCanvas"></div>
+                <div class="map-selected" id="mapSelectedText">当前未选择市区，先去地图上点一点吧。</div>
             </div>
 
             <!-- 排行榜 + 讨论区 -->
@@ -589,9 +589,9 @@
             </div>
             <div>
                 <div class="section-title"><i class="fas fa-receipt"></i> 近期订单</div>
-                <div class="order-item"><i class="fas fa-map-pin"></i> 云南·风花雪月盲盒 · 已完成</div>
-                <div class="order-item"><i class="fas fa-mask"></i> 西安剧本游《长安幻夜》 · 待体验</div>
-                <div class="order-item"><i class="fas fa-ticket-alt"></i> 四川熊猫基地·数字藏品票</div>
+                <div class="order-item"><i class="fas fa-map-pin"></i> 黄山·迎客松盲盒 · 已完成</div>
+                <div class="order-item"><i class="fas fa-mask"></i> 合肥剧本游《包公奇案》 · 待体验</div>
+                <div class="order-item"><i class="fas fa-ticket-alt"></i> 芜湖方特乐园·数字门票</div>
             </div>
         </div>
 
@@ -623,44 +623,48 @@
     </div>
 
     <script>
-        // ---------- 丰富省份数据 (包含介绍和景点) ----------
+        // ---------- 安徽市级数据 ----------
         const provincesData = [
-            { name: "北京", emoji: "🏯", desc: "古今交融 · 帝都气韵", attractions: "故宫、长城、天坛、胡同", specialty: "京味文化", food: "北京烤鸭、炸酱面、豆汁、卤煮火烧、驴打滚", season: "秋季最宜" },
-            { name: "上海", emoji: "🌃", desc: "摩登都市 · 不夜外滩", attractions: "外滩、迪士尼、武康路", specialty: "海派风情", food: "小笼包、生煎、蟹壳黄、葱油拌面、排骨年糕", season: "春秋最佳" },
-            { name: "广东", emoji: "🥟", desc: "食在广州，岭南风情", attractions: "广州塔、长隆、潮汕美食", specialty: "广府早茶", food: "肠粉、虾饺、烧鹅、艇仔粥、云吞面", season: "冬春舒适" },
-            { name: "四川", emoji: "🐼", desc: "天府之国，熊猫故乡", attractions: "九寨沟、大熊猫基地、火锅", specialty: "麻辣江湖", food: "四川火锅、麻婆豆腐、兔头、担担面、钵钵鸡", season: "春秋最美" },
-            { name: "云南", emoji: "🌸", desc: "彩云之南，柔软时光", attractions: "丽江古城、洱海、玉龙雪山", specialty: "花海慢旅", food: "过桥米线、汽锅鸡、鲜花饼、乳扇、野生菌火锅", season: "四季皆可" },
-            { name: "陕西", emoji: "🏺", desc: "秦砖汉瓦，千年长安", attractions: "兵马俑、大雁塔、不夜城", specialty: "盛唐古韵", food: "肉夹馍、biangbiang面、凉皮、羊肉泡馍、灌汤包", season: "春秋推荐" },
-            { name: "江苏", emoji: "🌿", desc: "江南水乡，园林雅韵", attractions: "拙政园、夫子庙、瘦西湖", specialty: "烟雨园林", food: "盐水鸭、蟹黄汤包、松鼠鳜鱼、阳澄湖大闸蟹、三套鸭", season: "春季绝佳" },
-            { name: "浙江", emoji: "🌊", desc: "诗画江南，山水灵秀", attractions: "西湖、乌镇、普陀山", specialty: "山水诗意", food: "东坡肉、片儿川、西湖醋鱼、龙井虾仁、定胜糕", season: "春秋最宜" },
-            { name: "湖南", emoji: "🌶️", desc: "湘辣热情，山水洲城", attractions: "张家界、凤凰古城、橘子洲", specialty: "湘味热辣", food: "剁椒鱼头、臭豆腐、糖油粑粑、口味虾、辣椒炒肉", season: "秋季推荐" },
-            { name: "福建", emoji: "🏮", desc: "清新福建，海上花园", attractions: "鼓浪屿、武夷山、土楼", specialty: "闽南海韵", food: "沙茶面、佛跳墙、海蛎煎、土笋冻、扁食", season: "春冬舒适" },
-            { name: "甘肃", emoji: "🐫", desc: "丝路遗韵，大漠画廊", attractions: "莫高窟、月牙泉、七彩丹霞", specialty: "丝路驼铃", food: "兰州牛肉面、酿皮、灰豆子、驴肉黄面、甜醅", season: "夏秋适合" },
-            { name: "新疆", emoji: "🍇", desc: "辽阔西域，瓜果天堂", attractions: "喀纳斯、那拉提、天山天池", specialty: "西域秘境", food: "大盘鸡、手抓饭、烤包子、拉条子、馕", season: "夏秋黄金期" },
-            { name: "贵州", emoji: "⛰️", desc: "山地公园，民族秘境", attractions: "黄果树瀑布、千户苗寨", specialty: "苗岭风情", food: "酸汤鱼、丝娃娃、肠旺面、豆腐圆子、恋爱豆腐果", season: "夏季避暑" },
-            { name: "重庆", emoji: "🌶️🌶️", desc: "8D魔幻，热辣山城", attractions: "洪崖洞、长江索道、火锅", specialty: "江湖山城", food: "重庆火锅、小面、抄手、酸辣粉、毛血旺", season: "秋冬巴适" }
+            { name: "合肥", emoji: "🏙️", desc: "科教之城，包公故里", attractions: "包公园、三河古镇、逍遥津", specialty: "创新高地", food: "庐州烤鸭、合肥小炒、三河米饺", season: "春秋最佳" },
+            { name: "芜湖", emoji: "🚤", desc: "江城水韵，鸠兹古都", attractions: "方特、鸠兹古镇、赭山公园", specialty: "江南名城", food: "芜湖虾籽面、酥烧饼", season: "春秋适宜" },
+            { name: "蚌埠", emoji: "🐚", desc: "珠城蚌埠，淮河明珠", attractions: "龙子湖、张公山公园", specialty: "珍珠之乡", food: "烧饼夹里脊、豆腐脑", season: "春秋舒适" },
+            { name: "淮南", emoji: "⛏️", desc: "能源之都，八公山下", attractions: "八公山、寿县古城", specialty: "煤电重镇", food: "牛肉汤、豆腐皮", season: "秋季最佳" },
+            { name: "马鞍山", emoji: "🏞️", desc: "诗城钢都，采石矶畔", attractions: "采石矶、雨山湖", specialty: "诗歌之城", food: "马鞍山板面、采石矶鱼头", season: "春秋皆宜" },
+            { name: "淮北", emoji: "🏭", desc: "皖北煤城，古邑新姿", attractions: "隋唐运河古镇、相山公园", specialty: "煤炭基地", food: "淮北烧鸡、牛肉板面", season: "秋季适合" },
+            { name: "铜陵", emoji: "🥉", desc: "铜都新貌，长江明珠", attractions: "天井湖、铜官山", specialty: "有色金属", food: "铜陵酥糖、铜官鱼头", season: "春秋适宜" },
+            { name: "安庆", emoji: "🎭", desc: "黄梅戏乡，皖江门户", attractions: "天柱山、迎江寺", specialty: "戏曲之乡", food: "安庆小吃、黄梅酥", season: "春秋最佳" },
+            { name: "黄山", emoji: "⛰️", desc: "天下奇山，徽州古韵", attractions: "黄山风景区、西递宏村", specialty: "徽文化", food: "毛豆腐、臭鳜鱼", season: "四季皆宜" },
+            { name: "滁州", emoji: "🍃", desc: "琅琊古郡，醉翁之意", attractions: "琅琊山、明中都遗址", specialty: "醉翁故里", food: "滁菊、全椒酥笏牌", season: "春秋适合" },
+            { name: "阜阳", emoji: "🌾", desc: "皖北粮仓，颍淮明珠", attractions: "颍州西湖、八里河", specialty: "农业大市", food: "阜阳牛肉馍、格拉条", season: "秋季丰收" },
+            { name: "宿州", emoji: "🌻", desc: "皖北门户，花鼓之乡", attractions: "灵璧石、埇桥公园", specialty: "花鼓戏", food: "宿州烧鸡、灵璧石斛", season: "春秋皆宜" },
+            { name: "六安", emoji: "🌲", desc: "大别山下，红色六安", attractions: "天堂寨、六安瓜片", specialty: "红色老区", food: "六安瓜片、霍山黄芽", season: "春秋最佳" },
+            { name: "亳州", emoji: "🌿", desc: "中药之都，酒乡花海", attractions: "花戏楼、古井酒厂", specialty: "中药材集散", food: "亳州牛肉馍、花茶", season: "春秋适宜" },
+            { name: "池州", emoji: "🦢", desc: "山水池州，九华圣地", attractions: "九华山、杏花村", specialty: "佛教名山", food: "池州臭鳜鱼、杏花酒", season: "春秋皆宜" },
+            { name: "宣城", emoji: "🖌️", desc: "文房四宝，江南诗地", attractions: "敬亭山、泾县桃花潭", specialty: "宣纸之乡", food: "宣城板鸭、泾县酥糖", season: "春秋最佳" }
         ];
 
         const provincePalette = {
-            北京: "#f4c27b",
-            上海: "#8ec5ff",
-            广东: "#ffbd8f",
-            四川: "#ff9f7a",
-            云南: "#95d6b5",
-            陕西: "#c7a27a",
-            江苏: "#a8d6d2",
-            浙江: "#9bc0ff",
-            湖南: "#ff8f7c",
-            福建: "#8fd3c8",
-            甘肃: "#d4b186",
-            新疆: "#d6b58d",
-            贵州: "#9fc9a7",
-            重庆: "#ff826a"
+            合肥: "#f4c27b",
+            芜湖: "#8ec5ff",
+            蚌埠: "#ffbd8f",
+            淮南: "#ff9f7a",
+            马鞍山: "#95d6b5",
+            淮北: "#c7a27a",
+            铜陵: "#a8d6d2",
+            安庆: "#9bc0ff",
+            黄山: "#ff8f7c",
+            滁州: "#8fd3c8",
+            阜阳: "#d4b186",
+            宿州: "#d6b58d",
+            六安: "#9fc9a7",
+            亳州: "#ff826a",
+            池州: "#b4e7d9",
+            宣城: "#f7bfa0"
         };
 
-        // 可拖动中国地图
-        let chinaMapChart = null;
-        let chinaMapOption = null;
+        // 可拖动安徽地图
+        let anhuiMapChart = null;
+        let anhuiMapOption = null;
 
         function normalizeProvinceName(name) {
             return (name || "")
@@ -685,63 +689,28 @@
             };
         }
 
-        async function ensureChinaMapReady() {
-            if (!window.echarts) return false;
-            if (echarts.getMap("china")) return true;
+        // 删除ensureAnhuiMapReady，直接在initAnhuiMap中fetch geojson
 
-            const mapScriptUrls = [];
-
-            for (const url of mapScriptUrls) {
-                try {
-                    await new Promise((resolve, reject) => {
-                        const script = document.createElement("script");
-                        script.src = url;
-                        script.async = true;
-                        script.onload = resolve;
-                        script.onerror = reject;
-                        document.head.appendChild(script);
-                    });
-                    if (echarts.getMap("china")) return true;
-                } catch (_) {
-                    // 持续尝试下一条CDN链接
-                }
-            }
-
-            try {
-                // 只使用 rediduck.github.io 的 GeoJSON
-                const geojsonUrls = [
-                    "https://rediduck.github.io/assets/geo/100000_full.json"
-                ];
-                for (const geoUrl of geojsonUrls) {
-                    try {
-                        const resp = await fetch(geoUrl);
-                        if (!resp.ok) continue;
-                        const geoJson = await resp.json();
-                        console.log(geoJson);
-                        echarts.registerMap("china", geoJson);
-                        return true;
-                    } catch (_) {
-                        // 当前地址失败，继续尝试
-                    }
-                }
-            } catch (_) {
-                return false;
-            }
-            return false;
-        }
-
-        async function initChinaMap() {
-            const mapEl = document.getElementById("chinaMapCanvas");
+        async function initAnhuiMap() {
+            const mapEl = document.getElementById("anhuiMapCanvas");
             if (!mapEl || !window.echarts) return;
 
-            const mapReady = await ensureChinaMapReady();
-            if (!mapReady) {
+            let geoJson;
+            try {
+                const resp = await fetch("https://rediduck.github.io/assets/geo/anhui.json"); // 修改为从 GitHub Pages 加载
+                if (!resp.ok) throw new Error("地图资源加载失败");
+                geoJson = await resp.json();
+            } catch (e) {
                 mapEl.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#7a4a37;font-size:13px;text-align:center;padding:16px;">地图资源加载失败，请检查网络后刷新页面</div>';
                 return;
             }
 
-            chinaMapChart = echarts.init(mapEl);
-            chinaMapOption = {
+            if (!echarts.getMap("anhui")) {
+                echarts.registerMap("anhui", geoJson);
+            }
+
+            anhuiMapChart = echarts.init(mapEl);
+            anhuiMapOption = {
                 tooltip: {
                     trigger: "item",
                     backgroundColor: "rgba(35, 53, 78, 0.92)",
@@ -751,7 +720,7 @@
                 series: [
                     {
                         type: "map",
-                        map: "china",
+                        map: "anhui",
                         selectedMode: "single",
                         roam: true,
                         zoom: 1.1,
@@ -776,19 +745,13 @@
                             },
                             label: { color: "#fff" }
                         },
-                        data: provincesData.map(item => ({
-                            name: item.name,
-                            value: Math.floor(Math.random() * 60) + 40,
-                            itemStyle: {
-                                areaColor: provincePalette[item.name] || "#ffd9bf"
-                            }
-                        }))
+                        data: provincesData.map(item => ({ name: item.name, value: 1 }))
                     }
                 ]
             };
 
-            chinaMapChart.setOption(chinaMapOption);
-            chinaMapChart.on("click", (params) => {
+            anhuiMapChart.setOption(anhuiMapOption);
+            anhuiMapChart.on("click", (params) => {
                 if (!params || !params.name) return;
                 const selectedText = document.getElementById("mapSelectedText");
                 const province = findProvinceData(params.name);
@@ -799,16 +762,16 @@
             const resetBtn = document.getElementById("resetMapBtn");
             if (resetBtn) {
                 resetBtn.addEventListener("click", () => {
-                    if (!chinaMapChart || !chinaMapOption) return;
-                    chinaMapChart.clear();
-                    chinaMapChart.setOption(chinaMapOption, true);
+                    if (!anhuiMapChart || !anhuiMapOption) return;
+                    anhuiMapChart.clear();
+                    anhuiMapChart.setOption(anhuiMapOption, true);
                     const selectedText = document.getElementById("mapSelectedText");
-                    selectedText.innerText = "当前未选择省份，先去地图上点一点吧。";
+                    selectedText.innerText = "当前未选择市区，先去地图上点一点吧。";
                 });
             }
 
             window.addEventListener("resize", () => {
-                if (chinaMapChart) chinaMapChart.resize();
+                if (anhuiMapChart) anhuiMapChart.resize();
             });
         }
 
@@ -824,17 +787,17 @@
             generateRanking();
             const rankUl = document.getElementById("rankList");
             rankUl.innerHTML = rankListData.map((item, idx) => `
-            <li><span><span style="display:inline-block; width:28px;">${idx + 1}</span> ${item.name}</span><span>🔥 ${item.heat} 热度</span></li>
-        `).join("");
+                <li><span><span style="display:inline-block; width:28px;">${idx + 1}</span> ${item.name}</span><span>🔥 ${item.heat} 热度</span></li>
+            `).join("");
         }
 
         // 讨论区丰富数据
         const discussComments = [
-            { avatar: "🧳", text: "北京: 雪后的故宫绝美！求约拍搭子" },
-            { avatar: "🏔️", text: "云南: 刚到大理，风花雪月太治愈了" },
-            { avatar: "🐼", text: "四川: 熊猫基地看到小崽崽，心都化了" },
-            { avatar: "🏺", text: "陕西: 兵马俑震撼到失语，强推VR体验" },
-            { avatar: "🍜", text: "甘肃: 敦煌夜市杏皮水配驴肉黄面绝了" }
+            { avatar: "⛰️", text: "黄山：云海日出太震撼！强烈推荐冬天来爬山" },
+            { avatar: "🏙️", text: "合肥：包公园的春天很美，适合全家出游" },
+            { avatar: "🚤", text: "芜湖：方特乐园超好玩，孩子们都不想走" },
+            { avatar: "🎭", text: "安庆：黄梅戏现场太精彩了，文化氛围浓厚" },
+            { avatar: "🌲", text: "六安：天堂寨的秋色美如画，拍照圣地" }
         ];
         function renderDiscuss() {
             const discussDiv = document.getElementById("discussArea");
@@ -881,78 +844,18 @@
 
         // 剧本游数据 (精美剧本)
         const scriptsData = [
-            { title: "《长安·十二时辰》", desc: "唐风探案，燃灯解谜，潜入靖安司", duration: "3小时", people: "4-8人" },
-            { title: "《泸沽湖·摩梭夜话》", desc: "女儿国传说，情感沉浸，篝火剧场", duration: "2.5小时", people: "5-7人" },
-            { title: "《敦煌·藏经洞之谜》", desc: "壁画守护者，夺宝对抗，机制阵营", duration: "3.5小时", people: "6-8人" }
+            { title: "《徽州古韵·徽商传奇》", desc: "穿越徽州古巷，体验徽商兴衰与家国情怀", duration: "3小时", people: "4-8人" },
+            { title: "《包公断案·庐州夜话》", desc: "化身包公，破解庐州奇案，感受正义与智慧", duration: "2.5小时", people: "5-7人" },
+            { title: "《九华山秘境探险》", desc: "探秘九华山传说，解锁佛教圣地的神秘故事", duration: "3.5小时", people: "6-8人" }
         ];
-        function renderScripts() {
-            const container = document.getElementById("scriptList");
-            container.innerHTML = scriptsData.map((s, idx) => `
-            <div class="script-card">
-                <div style="font-weight:800; font-size:18px; display:flex; justify-content:space-between;"><span>📖 ${s.title}</span><span class="badge-hot">🔥 人气</span></div>
-                <div style="margin:10px 0; color:#5c6f87;">${s.desc}</div>
-                <div style="display:flex; justify-content: space-between; align-items:center; margin-top:10px;">
-                    <span><i class="far fa-clock"></i> ${s.duration}  ·  ${s.people}</span>
-                    <button class="btn-sm script-detail-btn" data-idx="${idx}" style="padding:6px 18px;">了解详情</button>
-                </div>
-            </div>
-        `).join("");
-            // 绑定详情按钮事件
-            document.querySelectorAll('.script-detail-btn').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const idx = this.getAttribute('data-idx');
-                    showScriptDetail(idx);
-                });
-            });
-        }
-        // 剧本详情弹窗
-        let scriptModal = null;
-        function showScriptDetail(idx) {
-            const s = scriptsData[idx];
-            if (!scriptModal) {
-                scriptModal = document.createElement('div');
-                scriptModal.className = 'modal-mask show';
-                scriptModal.innerHTML = `
-                    <div class="province-modal">
-                        <h3 style="font-size:22px;">${s.title}</h3>
-                        <div style="margin:12px 0 10px; color:#5c6f87;">${s.desc}</div>
-                        <div style="margin-bottom:10px; color:#7a4a37;">时长：${s.duration} &nbsp; | &nbsp; 人数：${s.people}</div>
-                        <div style="margin:10px 0 18px; color:#4a5b6e; font-size:15px;">${getScriptDetailText(s.title)}</div>
-                        <div class="modal-buttons">
-                            <button class="btn-sm" id="closeScriptModalBtn">关闭</button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(scriptModal);
-            } else {
-                scriptModal.querySelector('h3').innerText = s.title;
-                scriptModal.querySelector('div[style*="color:#5c6f87;"]').innerText = s.desc;
-                scriptModal.querySelector('div[style*="color:#7a4a37;"]').innerText = `时长：${s.duration}  |  人数：${s.people}`;
-                scriptModal.querySelector('div[style*="color:#4a5b6e;"]').innerText = getScriptDetailText(s.title);
-                scriptModal.classList.add('show');
-            }
-            scriptModal.style.display = 'flex';
-            scriptModal.querySelector('#closeScriptModalBtn').onclick = function () {
-                scriptModal.classList.remove('show');
-                scriptModal.style.display = 'none';
-            };
-            scriptModal.onclick = function (e) {
-                if (e.target === scriptModal) {
-                    scriptModal.classList.remove('show');
-                    scriptModal.style.display = 'none';
-                }
-            };
-        }
-
-        // 剧本内容详情（可自定义）
         function getScriptDetailText(title) {
             switch (title) {
-                case '《长安·十二时辰》':
-                    return '你将化身靖安司密探，穿梭于盛唐长安，破解悬案，体验古都风云与探案乐趣。';
-                case '《泸沽湖·摩梭夜话》':
-                    return '走进女儿国传说，参与篝火剧场，沉浸式体验摩梭文化与情感故事。';
-                case '《敦煌·藏经洞之谜》':
-                    return '守护壁画，解锁机关，体验敦煌千年文化与宝藏争夺的刺激。';
+                case '《徽州古韵·徽商传奇》':
+                    return '你将化身徽商后人，穿梭于徽州古巷，体验商道与家国情怀的碰撞。';
+                case '《包公断案·庐州夜话》':
+                    return '化身包公，夜探庐州，破解奇案，感受正义与智慧的较量。';
+                case '《九华山秘境探险》':
+                    return '组队探秘九华山，解锁佛教圣地的神秘传说与自然奇观。';
                 default:
                     return '精彩剧本，敬请期待！';
             }
@@ -965,8 +868,8 @@
             <div class="blind-item" data-province="${prov.name}" data-emoji="${prov.emoji}" data-desc="${prov.desc}">
                 <div class="blind-face blind-front">
                     <div class="blind-icon">🎴</div>
-                    <div class="blind-name">文旅翻牌</div>
-                    <div class="blind-hint">点击翻开惊喜</div>
+                    <div class="blind-name">安徽文旅盲盒</div> <!-- 修改为安徽文旅盲盒 -->
+                    <div class="blind-hint">点击翻开安徽惊喜</div> <!-- 修改提示为安徽相关 -->
                 </div>
                 <div class="blind-face blind-back">
                     <div class="blind-icon">${prov.emoji}</div>
@@ -982,7 +885,7 @@
                     const provinceName = el.getAttribute("data-province");
                     const emoji = el.getAttribute("data-emoji");
                     const desc = el.getAttribute("data-desc");
-                    const rewards = ["景区门票5折券", "文创帆布袋", "特色明信片套装", "当地美食体验券", "限定冰箱贴"];
+                    const rewards = ["安徽景区门票5折券", "徽州文创帆布袋", "黄山特色明信片套装", "徽菜美食体验券", "安徽限定冰箱贴"]; // 修改奖励为安徽相关
                     const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
                     const rewardArea = el.querySelector(".blind-reward");
                     if (rewardArea) rewardArea.textContent = `${emoji} ${provinceName} · ${randomReward}`;
@@ -1003,7 +906,7 @@
                 renderRanking();    // 排行榜动态更新
                 renderDiscuss();
                 setTimeout(() => {
-                    if (chinaMapChart) chinaMapChart.resize();
+                    if (typeof anhuiMapChart !== 'undefined' && anhuiMapChart) anhuiMapChart.resize();
                 }, 160);
             }
             if (pageId === 'blindbox') {
@@ -1033,7 +936,7 @@
         });
 
         // 全部初始化
-        initChinaMap();
+        initAnhuiMap();
         renderRanking();
         renderDiscuss();
         renderScripts();
