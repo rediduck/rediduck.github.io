@@ -846,7 +846,11 @@
         const scriptsData = [
             { title: "《徽州古韵·徽商传奇》", desc: "穿越徽州古巷，体验徽商兴衰与家国情怀", duration: "3小时", people: "4-8人" },
             { title: "《包公断案·庐州夜话》", desc: "化身包公，破解庐州奇案，感受正义与智慧", duration: "2.5小时", people: "5-7人" },
-            { title: "《九华山秘境探险》", desc: "探秘九华山传说，解锁佛教圣地的神秘故事", duration: "3.5小时", people: "6-8人" }
+            { title: "《九华山秘境探险》", desc: "探秘九华山传说，解锁佛教圣地的神秘故事", duration: "3.5小时", people: "6-8人" },
+            { title: "《滁州醉翁亭谜案》", desc: "醉翁之意不在酒，破解亭中谜案，体验欧阳修文采风流", duration: "2小时", people: "4-6人" },
+            { title: "《安庆黄梅戏台前幕后》", desc: "走进黄梅戏剧团，体验台前幕后的人生百态", duration: "2.5小时", people: "5-8人" },
+            { title: "《芜湖长江夜航》", desc: "夜游长江，探寻芜湖港口的历史与传奇", duration: "2小时", people: "3-6人" },
+            { title: "《六安红色记忆》", desc: "重走大别山革命路，体验红色六安的峥嵘岁月", duration: "3小时", people: "6-10人" }
         ];
         function getScriptDetailText(title) {
             switch (title) {
@@ -856,9 +860,31 @@
                     return '化身包公，夜探庐州，破解奇案，感受正义与智慧的较量。';
                 case '《九华山秘境探险》':
                     return '组队探秘九华山，解锁佛教圣地的神秘传说与自然奇观。';
+                case '《滁州醉翁亭谜案》':
+                    return '欧阳修笔下的醉翁亭，隐藏着怎样的谜团？你将化身文人墨客，破解谜案。';
+                case '《安庆黄梅戏台前幕后》':
+                    return '走进黄梅戏剧团，体验台前幕后的人生百态，感受戏曲魅力。';
+                case '《芜湖长江夜航》':
+                    return '夜色下的芜湖港口，历史与传奇交织，等你来探寻。';
+                case '《六安红色记忆》':
+                    return '重走大别山革命路，体验红色六安的峥嵘岁月与英雄故事。';
                 default:
                     return '精彩剧本，敬请期待！';
             }
+        }
+
+
+        // 剧本游渲染函数
+        function renderScripts() {
+            const scriptList = document.getElementById("scriptList");
+            scriptList.innerHTML = scriptsData.map(script => `
+                <div class="script-card">
+                    <div style="font-size:18px;font-weight:700;margin-bottom:6px;">${script.title}</div>
+                    <div style="color:#7a4a37;font-size:13px;margin-bottom:8px;">${script.desc}</div>
+                    <div style="font-size:12px;color:#ff7a45;margin-bottom:4px;">⏳ 时长：${script.duration} &nbsp; 👥 人数：${script.people}</div>
+                    <div style="font-size:12px;color:#4a5b6e;">${getScriptDetailText(script.title)}</div>
+                </div>
+            `).join("");
         }
 
         // 盲盒渲染及开盒效果
@@ -868,8 +894,8 @@
             <div class="blind-item" data-province="${prov.name}" data-emoji="${prov.emoji}" data-desc="${prov.desc}">
                 <div class="blind-face blind-front">
                     <div class="blind-icon">🎴</div>
-                    <div class="blind-name">安徽文旅盲盒</div> <!-- 修改为安徽文旅盲盒 -->
-                    <div class="blind-hint">点击翻开安徽惊喜</div> <!-- 修改提示为安徽相关 -->
+                    <div class="blind-name">安徽文旅盲盒</div>
+                    <div class="blind-hint">点击翻开安徽惊喜</div>
                 </div>
                 <div class="blind-face blind-back">
                     <div class="blind-icon">${prov.emoji}</div>
@@ -885,7 +911,7 @@
                     const provinceName = el.getAttribute("data-province");
                     const emoji = el.getAttribute("data-emoji");
                     const desc = el.getAttribute("data-desc");
-                    const rewards = ["安徽景区门票5折券", "徽州文创帆布袋", "黄山特色明信片套装", "徽菜美食体验券", "安徽限定冰箱贴"]; // 修改奖励为安徽相关
+                    const rewards = ["安徽景区门票5折券", "徽州文创帆布袋", "黄山特色明信片套装", "徽菜美食体验券", "安徽限定冰箱贴"];
                     const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
                     const rewardArea = el.querySelector(".blind-reward");
                     if (rewardArea) rewardArea.textContent = `${emoji} ${provinceName} · ${randomReward}`;
