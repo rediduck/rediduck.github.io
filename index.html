@@ -887,16 +887,75 @@
         ];
         function renderScripts() {
             const container = document.getElementById("scriptList");
-            container.innerHTML = scriptsData.map(s => `
+            container.innerHTML = scriptsData.map((s, idx) => `
             <div class="script-card">
                 <div style="font-weight:800; font-size:18px; display:flex; justify-content:space-between;"><span>📖 ${s.title}</span><span class="badge-hot">🔥 人气</span></div>
                 <div style="margin:10px 0; color:#5c6f87;">${s.desc}</div>
                 <div style="display:flex; justify-content: space-between; align-items:center; margin-top:10px;">
                     <span><i class="far fa-clock"></i> ${s.duration}  ·  ${s.people}</span>
-                    <button class="btn-sm" style="padding:6px 18px;">即刻上车</button>
+                    <button class="btn-sm script-detail-btn" data-idx="${idx}" style="padding:6px 18px;">了解详情</button>
                 </div>
             </div>
         `).join("");
+            // 绑定详情按钮事件
+            document.querySelectorAll('.script-detail-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const idx = this.getAttribute('data-idx');
+                    showScriptDetail(idx);
+                });
+            });
+        }
+        // 剧本详情弹窗
+        let scriptModal = null;
+        function showScriptDetail(idx) {
+            const s = scriptsData[idx];
+            if (!scriptModal) {
+                scriptModal = document.createElement('div');
+                scriptModal.className = 'modal-mask show';
+                scriptModal.innerHTML = `
+                    <div class="province-modal">
+                        <h3 style="font-size:22px;">${s.title}</h3>
+                        <div style="margin:12px 0 10px; color:#5c6f87;">${s.desc}</div>
+                        <div style="margin-bottom:10px; color:#7a4a37;">时长：${s.duration} &nbsp; | &nbsp; 人数：${s.people}</div>
+                        <div style="margin:10px 0 18px; color:#4a5b6e; font-size:15px;">${getScriptDetailText(s.title)}</div>
+                        <div class="modal-buttons">
+                            <button class="btn-sm" id="closeScriptModalBtn">关闭</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(scriptModal);
+            } else {
+                scriptModal.querySelector('h3').innerText = s.title;
+                scriptModal.querySelector('div[style*="color:#5c6f87;"]').innerText = s.desc;
+                scriptModal.querySelector('div[style*="color:#7a4a37;"]').innerText = `时长：${s.duration}  |  人数：${s.people}`;
+                scriptModal.querySelector('div[style*="color:#4a5b6e;"]').innerText = getScriptDetailText(s.title);
+                scriptModal.classList.add('show');
+            }
+            scriptModal.style.display = 'flex';
+            scriptModal.querySelector('#closeScriptModalBtn').onclick = function () {
+                scriptModal.classList.remove('show');
+                scriptModal.style.display = 'none';
+            };
+            scriptModal.onclick = function (e) {
+                if (e.target === scriptModal) {
+                    scriptModal.classList.remove('show');
+                    scriptModal.style.display = 'none';
+                }
+            };
+        }
+
+        // 剧本内容详情（可自定义）
+        function getScriptDetailText(title) {
+            switch (title) {
+                case '《长安·十二时辰》':
+                    return '你将化身靖安司密探，穿梭于盛唐长安，破解悬案，体验古都风云与探案乐趣。';
+                case '《泸沽湖·摩梭夜话》':
+                    return '走进女儿国传说，参与篝火剧场，沉浸式体验摩梭文化与情感故事。';
+                case '《敦煌·藏经洞之谜》':
+                    return '守护壁画，解锁机关，体验敦煌千年文化与宝藏争夺的刺激。';
+                default:
+                    return '精彩剧本，敬请期待！';
+            }
         }
 
         // 盲盒渲染及开盒效果
