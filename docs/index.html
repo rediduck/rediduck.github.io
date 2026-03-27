@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>文旅盲盒 · 漫游中国</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
+    <!-- 引入 Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- 引入 Swiper 滑动库，用于首页滑动活动页 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        try {
+            // 只尝试本地GeoJSON文件，路径写为相对根目录，适配本地和服务器
+            const geojsonUrls=[ location.origin+'/assets/geo/100000_full.json',
+            '/assets/geo/100000_full.json'
+            ];
+
+            for (const geoUrl of geojsonUrls) {
+                try {
+                    const resp=await fetch(geoUrl);
+                    if ( !resp.ok) continue;
+                    const geoJson=await resp.json();
+                    echarts.registerMap("china", geoJson);
+                    return true;
+                }
+
+                catch (_) {
+                    // 当前地址失败，继续尝试
+                }
+            }
+        }
+
+        catch (_) {
+            return false;
+        }
+
+        return false;
+        }
+
+        justify-content: center;
+        align-items: center;
+        padding: 18px;
+        }
+
+        /* 主容器 - 精致卡片手机风格 */
+        .app-container {
+            max-width: 450px;
+            width: 100%;
+            height: 780px;
+            background: #ffffff;
+            border-radius: 48px;
+            box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            backdrop-filter: blur(0px);
+        }
+
+        /* 页面内容区 */
+        .page-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 18px 12px 18px;
+            scroll-behavior: smooth;
+        }
+
+        .page-content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .page-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .page-content::-webkit-scrollbar-thumb {
+            background: #ffaa88;
+            border-radius: 10px;
+        }
+
+        /* 底部导航栏 */
+        .bottom-nav {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 20px 24px;
+            box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #8e9aaf;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .nav-item i {
+            font-size: 24px;
+        }
+
+        .nav-item.active {
+            color: #ff6b3b;
+            transform: translateY(-3px);
+            text-shadow: 0 2px 6px rgba(255, 107, 59, 0.2);
+        }
+
+        /* 页面切换 */
+        .page {
+            display: none;
+            animation: fadeInUp 0.28s ease-out;
+        }
+
+        .active-page {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 首页地图样式 */
+        .map-header {
+            margin-bottom: 20px;
+        }
+
+        .map-title {
+            font-size: 30px;
+            font-weight: 800;
+            font-family: 'ZCOOL XiaoWei', serif;
+            background: linear-gradient(135deg, #2c3e66, #ff7a45);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .sub {
+            color: #6c7a8e;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* 首页中国地图交互区 */
+        .map-stage {
+            margin: 18px 0 22px;
+            border-radius: 34px;
+            padding: 14px;
+            background:
+                radial-gradient(circle at 18% 18%, rgba(255, 136, 88, 0.22), transparent 44%),
+                radial-gradient(circle at 82% 80%, rgba(44, 86, 142, 0.18), transparent 42%),
+                linear-gradient(135deg, #fff9f4, #fffdfb);
+            box-shadow: inset 0 0 0 1px rgba(255, 230, 214, 0.85), 0 10px 22px rgba(35, 61, 98, 0.08);
+        }
+
+        .map-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 6px 8px 10px;
+        }
+
+        .map-tip {
+            font-size: 12px;
+            color: #4d617e;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 999px;
+            padding: 4px 10px;
+            border: 1px solid rgba(255, 141, 97, 0.25);
+        }
+
+        .map-reset-btn {
+            border: none;
+            background: linear-gradient(135deg, #ff9f66, #ff7a45);
+            color: #fff;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            cursor: pointer;
+            box-shadow: 0 8px 14px rgba(255, 122, 69, 0.28);
+        }
+
+        #chinaMapCanvas {
+            width: 100%;
+            height: 340px;
+            border-radius: 24px;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(246, 250, 255, 0.92));
+        }
+
+        .map-selected {
+            margin-top: 10px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.92);
+            color: #325375;
+            font-size: 13px;
+            padding: 9px 12px;
+            border: 1px dashed rgba(70, 114, 171, 0.35);
+        }
+
+        @media (max-width: 480px) {
+            #chinaMapCanvas {
+                height: 300px;
+            }
+        }
+
+        /* 省份详情弹窗 (精致毛玻璃) */
+        .modal-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
+        .modal-mask.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .province-modal {
+            background: rgba(255, 255, 255, 0.98);
+            width: 86%;
+            max-width: 340px;
+            border-radius: 48px;
+            padding: 26px 22px;
+            text-align: center;
+            box-shadow: 0 30px 45px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(2px);
+        }
+
+        .province-modal h3 {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .province-info-list {
+            margin: 12px 0 6px;
+            text-align: left;
+            background: #fff8f2;
+            border-radius: 20px;
+            border: 1px solid #ffe1cf;
+            padding: 10px 12px;
+        }
+
+        .province-info-item {
+            font-size: 13px;
+            color: #5b3f2f;
+            line-height: 1.6;
+            margin: 4px 0;
+        }
+
+        .province-modal p {
+            color: #4a5b6e;
+            margin: 10px 0;
+            font-size: 15px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            justify-content: center;
+        }
+
+        .btn-sm {
+            background: #ff7a45;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-outline {
+            background: #f0f2f8;
+            color: #ff7a45;
+            border: 1px solid #ffd8c6;
+        }
+
+        .btn-sm:hover {
+            opacity: 0.85;
+            transform: scale(0.96);
+        }
+
+        /* 排行榜 & 讨论区卡片 */
+        .rank-discuss {
+            background: #ffffffea;
+            border-radius: 34px;
+            padding: 18px;
+            margin: 18px 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 0 0 1px #fff2ea;
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            color: #1f2a3e;
+        }
+
+        .rank-list {
+            list-style: none;
+        }
+
+        .rank-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f7ede6;
+            font-weight: 500;
+        }
+
+        .discuss-item {
+            background: #fef9f5;
+            border-radius: 24px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* 剧本游卡片 */
+        .script-card {
+            background: linear-gradient(115deg, #fffaf5, #ffffff);
+            border-radius: 32px;
+            padding: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.03);
+            border-left: 8px solid #ff7a45;
+            transition: 0.2s;
+        }
+
+        /* 盲盒网格 */
+        .blindbox-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: space-between;
+            margin: 16px 0;
+            perspective: 1200px;
+        }
+
+        .blind-item {
+            width: calc(33.33% - 10px);
+            height: 148px;
+            border-radius: 24px;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
+        }
+
+        .blind-item.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .blind-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 12px 8px;
+            border: 1px solid #ffe2cf;
+            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .blind-front {
+            background: linear-gradient(135deg, #fff5ed, #fffbf5);
+            color: #a44f2b;
+        }
+
+        .blind-back {
+            background: linear-gradient(135deg, #fff0e4, #ffe6d3);
+            transform: rotateY(180deg);
+            color: #8d3f1f;
+        }
+
+        .blind-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .blind-item.flipped:hover {
+            transform: rotateY(180deg) translateY(-4px);
+        }
+
+        .blind-icon {
+            font-size: 36px;
+            line-height: 1;
+        }
+
+        .blind-name {
+            font-weight: 800;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .blind-hint {
+            margin-top: 6px;
+            font-size: 11px;
+            color: #ff8a5c;
+        }
+
+        .blind-reward {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #743016;
+            font-weight: 600;
+        }
+
+        /* 我的页面 */
+        .profile-card {
+            background: linear-gradient(125deg, #fff2ea, #fff9f4);
+            border-radius: 42px;
+            padding: 28px 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            margin: 22px 0 12px;
+        }
+
+        .stat-cell {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ff7a45;
+        }
+
+        .order-item {
+            background: #faf9ff;
+            border-radius: 28px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .swiper-container {
+            border-radius: 32px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .swiper-slide {
+            background: linear-gradient(115deg, #ffe9df, #ffe1d1);
+            border-radius: 32px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: #b4512c;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .badge-hot {
+            background: #ffede3;
+            border-radius: 50px;
+            padding: 2px 12px;
+            font-size: 11px;
+        }
+
+        footer {
+            font-size: 10px;
+            text-align: center;
+            margin-top: 16px;
+            color: #bbb;
+        }
+
+        i.fa,
+        i.far,
+        i.fas {
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 首页 -->
+        <div id="page-home" class="page active-page page-content">
+            <div class="map-header">
+                <div class="map-title">文旅盲盒</div>
+                <div class="sub">指尖漫游 · 寻梦山河</div>
+            </div>
+
+            <!-- 滑动节假日活动 swiper -->
+            <div class="swiper-container swiper-holiday">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">🌸 婺源花海节 · 春日限定</div>
+                    <div class="swiper-slide">🏮 端午汨罗江 · 龙舟竞渡</div>
+                    <div class="swiper-slide">⛰️ 贵州避暑季 · 六盘水凉都</div>
+                    <div class="swiper-slide">🍁 额济纳旗 · 金秋胡杨林</div>
+                    <div class="swiper-slide">❄️ 哈尔滨冰雪大世界 · 冬日童话</div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+
+            <!-- 地图区：可拖动中国地图 -->
+            <div class="map-stage">
+                <div class="map-toolbar">
+                    <div class="map-tip">拖动或缩放地图，点击省份查看盲盒攻略</div>
+                    <button class="map-reset-btn" id="resetMapBtn">重置视图</button>
+                </div>
+                <div id="chinaMapCanvas"></div>
+                <div class="map-selected" id="mapSelectedText">当前未选择省份，先去地图上点一点吧。</div>
+            </div>
+
+            <!-- 排行榜 + 讨论区 -->
+            <div class="rank-discuss">
+                <div class="section-title"><i class="fas fa-trophy" style="color:#ff9f4a;"></i> 人气省份榜</div>
+                <ul class="rank-list" id="rankList"></ul>
+            </div>
+            <div class="rank-discuss">
+                <div class="section-title"><i class="fas fa-comment-dots"></i> 旅友热议</div>
+                <div id="discussArea"></div>
+            </div>
+            <footer>✨ 点击省份解锁详细攻略 ✨</footer>
+        </div>
+
+        <!-- 剧本游页面 -->
+        <div id="page-script" class="page page-content">
+            <div class="map-title" style="font-size: 26px;"><i class="fas fa-scroll"></i> 剧本游</div>
+            <div class="sub" style="margin-bottom: 22px;">沉浸式剧情，做故事的主角</div>
+            <div id="scriptList"></div>
+        </div>
+
+        <!-- 盲盒页面 -->
+        <div id="page-blindbox" class="page page-content">
+            <div class="map-title" style="font-size: 26px;"><i class="fas fa-gift"></i> 惊喜盲盒</div>
+            <div class="sub">点击任意盲盒，抽取省份限定礼遇</div>
+            <div id="blindboxContainer" class="blindbox-grid"></div>
+        </div>
+
+        <!-- 我的页面 -->
+        <div id="page-profile" class="page page-content">
+            <div class="profile-card">
+                <i class="fas fa-hiking" style="font-size: 56px; color:#ff7a45;"></i>
+                <h3 style="margin: 12px 0 4px;">山野旅人</h3>
+                <div class="stats-grid">
+                    <div class="stat-cell">
+                        <div class="stat-number">8</div>
+                        <div>订单</div>
+                    </div>
+                    <div class="stat-cell">
+                        <div class="stat-number">14</div>
+                        <div>任务</div>
+                    </div>
+                    <div class="stat-cell">
+                        <div class="stat-number">11</div>
+                        <div>作品</div>
+                    </div>
+                    <div class="stat-cell">
+                        <div class="stat-number">27</div>
+                        <div>收藏</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                    <button class="btn-sm" style="background:#2c3e66;">📚 我的收藏</button>
+                    <button class="btn-sm btn-outline">✍️ 我的作品</button>
+                </div>
+            </div>
+            <div>
+                <div class="section-title"><i class="fas fa-receipt"></i> 近期订单</div>
+                <div class="order-item"><i class="fas fa-map-pin"></i> 云南·风花雪月盲盒 · 已完成</div>
+                <div class="order-item"><i class="fas fa-mask"></i> 西安剧本游《长安幻夜》 · 待体验</div>
+                <div class="order-item"><i class="fas fa-ticket-alt"></i> 四川熊猫基地·数字藏品票</div>
+            </div>
+        </div>
+
+        <!-- 底部导航栏 -->
+        <div class="bottom-nav">
+            <div class="nav-item" data-page="home"><i class="fas fa-map-marked-alt"></i><span>首页</span></div>
+            <div class="nav-item" data-page="script"><i class="fas fa-scroll"></i><span>剧本游</span></div>
+            <div class="nav-item" data-page="blindbox"><i class="fas fa-gift"></i><span>盲盒</span></div>
+            <div class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>我的</span></div>
+        </div>
+    </div>
+
+    <!-- 省份详情弹窗 -->
+    <div id="provinceModal" class="modal-mask">
+        <div class="province-modal">
+            <h3 id="modalProvinceName"></h3>
+            <div class="province-info-list">
+                <div class="province-info-item" id="modalSpecialty"></div>
+                <div class="province-info-item" id="modalAttractions"></div>
+                <div class="province-info-item" id="modalFood"></div>
+                <div class="province-info-item" id="modalSeason"></div>
+            </div>
+            <p id="modalProvinceDesc"></p>
+            <div class="modal-buttons">
+                <button class="btn-sm" id="closeModalBtn">关闭</button>
+                <button class="btn-sm btn-outline" id="gotoDiscussBtn">💬 去讨论区</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------- 丰富省份数据 (包含介绍和景点) ----------
+        const provincesData = [
+            { name: "北京", emoji: "🏯", desc: "古今交融 · 帝都气韵", attractions: "故宫、长城、天坛、胡同", specialty: "京味文化", food: "北京烤鸭、炸酱面、豆汁、卤煮火烧、驴打滚", season: "秋季最宜" },
+            { name: "上海", emoji: "🌃", desc: "摩登都市 · 不夜外滩", attractions: "外滩、迪士尼、武康路", specialty: "海派风情", food: "小笼包、生煎、蟹壳黄、葱油拌面、排骨年糕", season: "春秋最佳" },
+            { name: "广东", emoji: "🥟", desc: "食在广州，岭南风情", attractions: "广州塔、长隆、潮汕美食", specialty: "广府早茶", food: "肠粉、虾饺、烧鹅、艇仔粥、云吞面", season: "冬春舒适" },
+            { name: "四川", emoji: "🐼", desc: "天府之国，熊猫故乡", attractions: "九寨沟、大熊猫基地、火锅", specialty: "麻辣江湖", food: "四川火锅、麻婆豆腐、兔头、担担面、钵钵鸡", season: "春秋最美" },
+            { name: "云南", emoji: "🌸", desc: "彩云之南，柔软时光", attractions: "丽江古城、洱海、玉龙雪山", specialty: "花海慢旅", food: "过桥米线、汽锅鸡、鲜花饼、乳扇、野生菌火锅", season: "四季皆可" },
+            { name: "陕西", emoji: "🏺", desc: "秦砖汉瓦，千年长安", attractions: "兵马俑、大雁塔、不夜城", specialty: "盛唐古韵", food: "肉夹馍、biangbiang面、凉皮、羊肉泡馍、灌汤包", season: "春秋推荐" },
+            { name: "江苏", emoji: "🌿", desc: "江南水乡，园林雅韵", attractions: "拙政园、夫子庙、瘦西湖", specialty: "烟雨园林", food: "盐水鸭、蟹黄汤包、松鼠鳜鱼、阳澄湖大闸蟹、三套鸭", season: "春季绝佳" },
+            { name: "浙江", emoji: "🌊", desc: "诗画江南，山水灵秀", attractions: "西湖、乌镇、普陀山", specialty: "山水诗意", food: "东坡肉、片儿川、西湖醋鱼、龙井虾仁、定胜糕", season: "春秋最宜" },
+            { name: "湖南", emoji: "🌶️", desc: "湘辣热情，山水洲城", attractions: "张家界、凤凰古城、橘子洲", specialty: "湘味热辣", food: "剁椒鱼头、臭豆腐、糖油粑粑、口味虾、辣椒炒肉", season: "秋季推荐" },
+            { name: "福建", emoji: "🏮", desc: "清新福建，海上花园", attractions: "鼓浪屿、武夷山、土楼", specialty: "闽南海韵", food: "沙茶面、佛跳墙、海蛎煎、土笋冻、扁食", season: "春冬舒适" },
+            { name: "甘肃", emoji: "🐫", desc: "丝路遗韵，大漠画廊", attractions: "莫高窟、月牙泉、七彩丹霞", specialty: "丝路驼铃", food: "兰州牛肉面、酿皮、灰豆子、驴肉黄面、甜醅", season: "夏秋适合" },
+            { name: "新疆", emoji: "🍇", desc: "辽阔西域，瓜果天堂", attractions: "喀纳斯、那拉提、天山天池", specialty: "西域秘境", food: "大盘鸡、手抓饭、烤包子、拉条子、馕", season: "夏秋黄金期" },
+            { name: "贵州", emoji: "⛰️", desc: "山地公园，民族秘境", attractions: "黄果树瀑布、千户苗寨", specialty: "苗岭风情", food: "酸汤鱼、丝娃娃、肠旺面、豆腐圆子、恋爱豆腐果", season: "夏季避暑" },
+            { name: "重庆", emoji: "🌶️🌶️", desc: "8D魔幻，热辣山城", attractions: "洪崖洞、长江索道、火锅", specialty: "江湖山城", food: "重庆火锅、小面、抄手、酸辣粉、毛血旺", season: "秋冬巴适" }
+        ];
+
+        const provincePalette = {
+            北京: "#f4c27b",
+            上海: "#8ec5ff",
+            广东: "#ffbd8f",
+            四川: "#ff9f7a",
+            云南: "#95d6b5",
+            陕西: "#c7a27a",
+            江苏: "#a8d6d2",
+            浙江: "#9bc0ff",
+            湖南: "#ff8f7c",
+            福建: "#8fd3c8",
+            甘肃: "#d4b186",
+            新疆: "#d6b58d",
+            贵州: "#9fc9a7",
+            重庆: "#ff826a"
+        };
+
+        // 可拖动中国地图
+        let chinaMapChart = null;
+        let chinaMapOption = null;
+
+        function normalizeProvinceName(name) {
+            return (name || "")
+                .replace(/壮族自治区|回族自治区|维吾尔自治区|特别行政区|自治区|省|市/g, "")
+                .trim();
+        }
+
+        function findProvinceData(name) {
+            const exact = provincesData.find(item => item.name === name);
+            if (exact) return exact;
+            const normalized = normalizeProvinceName(name);
+            const fuzzy = provincesData.find(item => normalizeProvinceName(item.name) === normalized);
+            if (fuzzy) return fuzzy;
+            return {
+                name,
+                emoji: "🧭",
+                desc: "山河有灵，风物待你亲访",
+                attractions: "当地古镇、博物馆、步行街",
+                specialty: "地方烟火",
+                food: "锅盔、烤红薯、豆花米线、特色小吃",
+                season: "四季可游"
+            };
+        }
+
+        async function ensureChinaMapReady() {
+            if (!window.echarts) return false;
+            if (echarts.getMap("china")) return true;
+
+            const mapScriptUrls = [];
+
+            for (const url of mapScriptUrls) {
+                try {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement("script");
+                        script.src = url;
+                        script.async = true;
+                        script.onload = resolve;
+                        script.onerror = reject;
+                        document.head.appendChild(script);
+                    });
+                    if (echarts.getMap("china")) return true;
+                } catch (_) {
+                    // 持续尝试下一条CDN链接
+                }
+            }
+
+            try {
+                const geojsonUrls = [
+                    "https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json",
+                    "https://geo.datav.aliyun.com/areas/bound/100000_full.json"
+                ];
+                for (const geoUrl of geojsonUrls) {
+                    try {
+                        const resp = await fetch(geoUrl);
+                        if (!resp.ok) continue;
+                        const geoJson = await resp.json();
+                        echarts.registerMap("china", geoJson);
+                        return true;
+                    } catch (_) {
+                        // 当前地址失败，继续尝试
+                    }
+                }
+            } catch (_) {
+                return false;
+            }
+
+            return false;
+        }
+
+        async function initChinaMap() {
+            const mapEl = document.getElementById("chinaMapCanvas");
+            if (!mapEl || !window.echarts) return;
+
+            const mapReady = await ensureChinaMapReady();
+            if (!mapReady) {
+                mapEl.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#7a4a37;font-size:13px;text-align:center;padding:16px;">地图资源加载失败，请检查网络后刷新页面</div>';
+                return;
+            }
+
+            chinaMapChart = echarts.init(mapEl);
+            chinaMapOption = {
+                tooltip: {
+                    trigger: "item",
+                    backgroundColor: "rgba(35, 53, 78, 0.92)",
+                    borderColor: "rgba(255,255,255,0.2)",
+                    textStyle: { color: "#fff", fontSize: 12 },
+                    formatter: (params) => {
+                        const p = findProvinceData(params.name);
+                        return `${p.emoji} ${params.name}<br/>${p.desc}<br/>风格: ${p.specialty}<br/>必游: ${p.attractions}`;
+                    }
+                },
+                geo: {
+                    map: "china",
+                    roam: true,
+                    zoom: 1.1,
+                    scaleLimit: { min: 1, max: 6 },
+                    itemStyle: {
+                        areaColor: "#ffd9bf",
+                        borderColor: "#ffffff",
+                        borderWidth: 1
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            areaColor: "#ff8f5a"
+                        },
+                        label: {
+                            color: "#fff",
+                            fontWeight: 700
+                        }
+                    },
+                    select: {
+                        itemStyle: {
+                            areaColor: "#2f5f9c"
+                        },
+                        label: { color: "#fff" }
+                    }
+                },
+                series: [
+                    {
+                        type: "map",
+                        map: "china",
+                        geoIndex: 0,
+                        selectedMode: "single",
+                        data: provincesData.map(item => ({
+                            name: item.name,
+                            value: Math.floor(Math.random() * 60) + 40,
+                            itemStyle: {
+                                areaColor: provincePalette[item.name] || "#ffd9bf"
+                            }
+                        }))
+                    }
+                ]
+            };
+
+            chinaMapChart.setOption(chinaMapOption);
+            chinaMapChart.on("click", (params) => {
+                if (!params || !params.name) return;
+                const selectedText = document.getElementById("mapSelectedText");
+                const province = findProvinceData(params.name);
+                selectedText.innerText = `已选择 ${province.emoji} ${province.name} · ${province.specialty} · ${province.desc}`;
+                showProvinceDetail(province);
+            });
+
+            const resetBtn = document.getElementById("resetMapBtn");
+            if (resetBtn) {
+                resetBtn.addEventListener("click", () => {
+                    if (!chinaMapChart || !chinaMapOption) return;
+                    chinaMapChart.clear();
+                    chinaMapChart.setOption(chinaMapOption, true);
+                    const selectedText = document.getElementById("mapSelectedText");
+                    selectedText.innerText = "当前未选择省份，先去地图上点一点吧。";
+                });
+            }
+
+            window.addEventListener("resize", () => {
+                if (chinaMapChart) chinaMapChart.resize();
+            });
+        }
+
+        // 排行榜数据(根据热度动态模拟，让每次刷新不一样)
+        let rankListData = [];
+        function generateRanking() {
+            rankListData = [...provincesData].map(p => ({
+                name: p.name,
+                heat: Math.floor(Math.random() * 8000) + 2000
+            })).sort((a, b) => b.heat - a.heat).slice(0, 6);
+        }
+        function renderRanking() {
+            generateRanking();
+            const rankUl = document.getElementById("rankList");
+            rankUl.innerHTML = rankListData.map((item, idx) => `
+            <li><span><span style="display:inline-block; width:28px;">${idx + 1}</span> ${item.name}</span><span>🔥 ${item.heat} 热度</span></li>
+        `).join("");
+        }
+
+        // 讨论区丰富数据
+        const discussComments = [
+            { avatar: "🧳", text: "北京: 雪后的故宫绝美！求约拍搭子" },
+            { avatar: "🏔️", text: "云南: 刚到大理，风花雪月太治愈了" },
+            { avatar: "🐼", text: "四川: 熊猫基地看到小崽崽，心都化了" },
+            { avatar: "🏺", text: "陕西: 兵马俑震撼到失语，强推VR体验" },
+            { avatar: "🍜", text: "甘肃: 敦煌夜市杏皮水配驴肉黄面绝了" }
+        ];
+        function renderDiscuss() {
+            const discussDiv = document.getElementById("discussArea");
+            discussDiv.innerHTML = discussComments.map(c => `
+            <div class="discuss-item">
+                <span style="font-size:24px;">${c.avatar}</span>
+                <span>${c.text}</span>
+            </div>
+        `).join("");
+        }
+
+        // 模态框逻辑
+        const modal = document.getElementById("provinceModal");
+        const modalName = document.getElementById("modalProvinceName");
+        const modalDesc = document.getElementById("modalProvinceDesc");
+        const modalSpecialty = document.getElementById("modalSpecialty");
+        const modalAttractions = document.getElementById("modalAttractions");
+        const modalFood = document.getElementById("modalFood");
+        const modalSeason = document.getElementById("modalSeason");
+
+        function showProvinceDetail(prov) {
+            modalName.innerHTML = `${prov.emoji} ${prov.name}`;
+            modalDesc.innerText = prov.desc;
+            modalSpecialty.innerText = `✨ 省份特色: ${prov.specialty}`;
+            modalAttractions.innerText = `📍 必游景点: ${prov.attractions}`;
+            modalFood.innerText = `🍜 地道美食: ${prov.food}`;
+            modalSeason.innerText = `🗓️ 推荐季节: ${prov.season}`;
+            modal.classList.add("show");
+            // 绑定“去讨论区”按钮: 关闭弹窗，切首页并滚动到讨论区
+            const gotoBtn = document.getElementById("gotoDiscussBtn");
+            const newGoto = gotoBtn.cloneNode(true);
+            gotoBtn.parentNode.replaceChild(newGoto, gotoBtn);
+            newGoto.addEventListener("click", () => {
+                modal.classList.remove("show");
+                switchPage('home');
+                setTimeout(() => {
+                    const discussEl = document.querySelector("#discussArea");
+                    if (discussEl) discussEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                }, 120);
+            });
+        }
+        document.getElementById("closeModalBtn").addEventListener("click", () => modal.classList.remove("show"));
+        modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("show"); });
+
+        // 剧本游数据 (精美剧本)
+        const scriptsData = [
+            { title: "《长安·十二时辰》", desc: "唐风探案，燃灯解谜，潜入靖安司", duration: "3小时", people: "4-8人" },
+            { title: "《泸沽湖·摩梭夜话》", desc: "女儿国传说，情感沉浸，篝火剧场", duration: "2.5小时", people: "5-7人" },
+            { title: "《敦煌·藏经洞之谜》", desc: "壁画守护者，夺宝对抗，机制阵营", duration: "3.5小时", people: "6-8人" }
+        ];
+        function renderScripts() {
+            const container = document.getElementById("scriptList");
+            container.innerHTML = scriptsData.map(s => `
+            <div class="script-card">
+                <div style="font-weight:800; font-size:18px; display:flex; justify-content:space-between;"><span>📖 ${s.title}</span><span class="badge-hot">🔥 人气</span></div>
+                <div style="margin:10px 0; color:#5c6f87;">${s.desc}</div>
+                <div style="display:flex; justify-content: space-between; align-items:center; margin-top:10px;">
+                    <span><i class="far fa-clock"></i> ${s.duration}  ·  ${s.people}</span>
+                    <button class="btn-sm" style="padding:6px 18px;">即刻上车</button>
+                </div>
+            </div>
+        `).join("");
+        }
+
+        // 盲盒渲染及开盒效果
+        function renderBlindbox() {
+            const blindContainer = document.getElementById("blindboxContainer");
+            blindContainer.innerHTML = provincesData.map(prov => `
+            <div class="blind-item" data-province="${prov.name}" data-emoji="${prov.emoji}" data-desc="${prov.desc}">
+                <div class="blind-face blind-front">
+                    <div class="blind-icon">🎴</div>
+                    <div class="blind-name">文旅翻牌</div>
+                    <div class="blind-hint">点击翻开惊喜</div>
+                </div>
+                <div class="blind-face blind-back">
+                    <div class="blind-icon">${prov.emoji}</div>
+                    <div class="blind-name">${prov.name}</div>
+                    <div class="blind-reward">已揭晓本轮盲盒</div>
+                </div>
+            </div>
+        `).join("");
+            // 盲盒点击开盒特效
+            document.querySelectorAll(".blind-item").forEach(el => {
+                el.addEventListener("click", () => {
+                    el.classList.toggle("flipped");
+                    const provinceName = el.getAttribute("data-province");
+                    const emoji = el.getAttribute("data-emoji");
+                    const desc = el.getAttribute("data-desc");
+                    const rewards = ["景区门票5折券", "文创帆布袋", "特色明信片套装", "当地美食体验券", "限定冰箱贴"];
+                    const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
+                    const rewardArea = el.querySelector(".blind-reward");
+                    if (rewardArea) rewardArea.textContent = `${emoji} ${provinceName} · ${randomReward}`;
+                });
+            });
+        }
+
+        // 页面切换核心逻辑
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
+            document.getElementById(`page-${pageId}`).classList.add('active-page');
+            document.querySelectorAll('.nav-item').forEach(item => {
+                if (item.getAttribute('data-page') === pageId) item.classList.add('active');
+                else item.classList.remove('active');
+            });
+            // 按需刷新内容，保持最新数据
+            if (pageId === 'home') {
+                renderRanking();    // 排行榜动态更新
+                renderDiscuss();
+                setTimeout(() => {
+                    if (chinaMapChart) chinaMapChart.resize();
+                }, 160);
+            }
+            if (pageId === 'blindbox') {
+                renderBlindbox();   // 保证盲盒列表渲染
+            }
+            if (pageId === 'script') {
+                renderScripts();
+            }
+        }
+
+        // 初始化滑动Swiper
+        function initSwiper() {
+            new Swiper('.swiper-holiday', {
+                loop: true,
+                autoplay: { delay: 2700, disableOnInteraction: false },
+                pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true },
+                spaceBetween: 15,
+            });
+        }
+
+        // 绑定导航栏事件
+        document.querySelectorAll('.nav-item').forEach(nav => {
+            nav.addEventListener('click', (e) => {
+                const page = nav.getAttribute('data-page');
+                switchPage(page);
+            });
+        });
+
+        // 全部初始化
+        initChinaMap();
+        renderRanking();
+        renderDiscuss();
+        renderScripts();
+        renderBlindbox();
+        initSwiper();
+        // 默认首页激活样式
+        switchPage('home');
+    </script>
+</body>
+
+</html>
