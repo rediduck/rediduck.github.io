@@ -70,12 +70,20 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
 .profile-card { background: linear-gradient(125deg, #e7ecdf, #faf9f1); border: 1px solid var(--line); border-radius: 24px; }
 .stat-number { color: #315e50; }
 .order-item { background: #fffefa; border: 1px solid var(--line); border-radius: 16px; }
-.province-modal { border-radius: 24px; max-width: 400px; max-height: 85dvh; overflow-y: auto; }
+.province-modal { display: flex; flex-direction: column; border-radius: 24px; max-width: 440px; max-height: 85dvh; overflow: hidden; padding: 0; }
+.province-modal-content { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 22px 22px 8px; text-align: left; }
+.province-modal h3 { margin: 0 0 16px; text-align: center; }
+.province-modal .modal-buttons { flex-shrink: 0; margin: 0; padding: 14px 18px; background: #fffefa; border-top: 1px solid var(--line); }
+.province-modal .city-intro { color: var(--ink); font-size: 13px; line-height: 1.85; margin: 14px 0; }
+.city-guide-note { border-left: 2px solid var(--gold); margin: 16px 0; padding: 0 0 0 12px; }
+.city-guide-note h4 { margin: 0 0 6px; font-size: 13px; color: var(--ink); }
+.province-modal .city-guide-note p { margin: 0; font-size: 12px; line-height: 1.85; color: #637364; }
+#modalProvinceDesc { font-size: 12px; color: var(--muted); }
 .province-info-list { background: #f3f4ec; border-color: var(--line); }
 .province-info-item { color: #526756; }
 .city-photo { margin: 0 0 16px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: #f3f4ec; text-align: left; }
 .city-photo[hidden] { display: none; }
-.city-photo img { display: block; width: 100%; height: 210px; object-fit: contain; }
+.city-photo img { display: block; width: 100%; height: 170px; object-fit: contain; }
 .city-photo figcaption { padding: 10px 12px; font-size: 13px; color: var(--ink); }
 .city-photo-credit { display: block; margin-top: 4px; font-size: 10px; color: #65746b; overflow-wrap: anywhere; }
 .city-photo-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
@@ -93,9 +101,17 @@ footer { color: var(--muted); letter-spacing: 2px; }
     .script-card { margin: 0; padding: 26px; }
 }
 @media (max-width: 799px) {
+    .province-modal { width: calc(100% - 32px); max-height: 88dvh; border-radius: 20px; }
+    .province-modal-content { padding: 16px 16px 4px; }
+    .province-modal h3 { font-size: 23px; margin-bottom: 12px; }
+    .city-photo { margin: 0 auto 12px; max-width: 300px; border-radius: 12px; }
+    .city-photo img { height: clamp(90px, 18dvh, 125px); }
+    .city-photo figcaption { padding: 7px 10px; font-size: 11px; }
+    .city-photo-credit { font-size: 9px; margin-top: 2px; line-height: 1.5; }
     body { padding: 0; }
     .app-container { height: 100dvh; min-height: 0; border: 0; border-radius: 0; }
     .page-content { padding: 24px 18px; }
+    #anhuiMapCanvas { height: clamp(340px, 52dvh, 400px); }
     .nav-item { padding: 8px 16px; }
     .map-header .map-title { font-size: 30px; }
     .map-tip { padding: 0; background: transparent; border: 0; font-size: 11px; }

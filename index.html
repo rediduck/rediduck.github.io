@@ -560,21 +560,28 @@
     <!-- 省份详情弹窗 -->
     <div id="provinceModal" class="modal-mask">
         <div class="province-modal">
-            <h3 id="modalProvinceName"></h3>
-            <figure class="city-photo" id="modalCityPhoto" hidden>
-                <img id="modalCityImage" alt="" decoding="async">
-                <figcaption>
-                    <span id="modalCityImageCaption"></span>
-                    <span class="city-photo-credit" id="modalCityImageCredit"></span>
-                </figcaption>
-            </figure>
-            <div class="province-info-list">
-                <div class="province-info-item" id="modalSpecialty"></div>
-                <div class="province-info-item" id="modalAttractions"></div>
-                <div class="province-info-item" id="modalFood"></div>
-                <div class="province-info-item" id="modalSeason"></div>
+            <div class="province-modal-content">
+                <h3 id="modalProvinceName"></h3>
+                <figure class="city-photo" id="modalCityPhoto" hidden>
+                    <img id="modalCityImage" alt="" decoding="async">
+                    <figcaption>
+                        <span id="modalCityImageCaption"></span>
+                        <span class="city-photo-credit" id="modalCityImageCredit"></span>
+                    </figcaption>
+                </figure>
+                <p class="city-intro" id="modalCityIntro"></p>
+                <div class="province-info-list">
+                    <div class="province-info-item" id="modalSpecialty"></div>
+                    <div class="province-info-item" id="modalAttractions"></div>
+                    <div class="province-info-item" id="modalFood"></div>
+                    <div class="province-info-item" id="modalSeason"></div>
+                </div>
+                <p id="modalProvinceDesc"></p>
+                <section class="city-guide-note" aria-labelledby="modalCityGuideTitle">
+                    <h4 id="modalCityGuideTitle">这样认识这座城</h4>
+                    <p id="modalCityExperience"></p>
+                </section>
             </div>
-            <p id="modalProvinceDesc"></p>
             <div class="modal-buttons">
                 <button class="btn-sm" id="closeModalBtn">关闭</button>
                 <button class="btn-sm btn-outline" id="gotoDiscussBtn">💬 去讨论区</button>
@@ -583,6 +590,7 @@
     </div>
 
     <script src="picture/cities.js"></script>
+    <script src="assets/city-guides.js"></script>
     <script>
         // ---------- 安徽市级数据 ----------
         const provincesData = [
@@ -709,8 +717,21 @@
                         map: "anhui",
                         selectedMode: "single",
                         roam: true,
-                        zoom: 1.1,
+                        zoom: 1,
+                        top: 16,
+                        bottom: 16,
+                        left: 12,
+                        right: 12,
                         scaleLimit: { min: 1, max: 6 },
+                        label: {
+                            show: true,
+                            formatter: params => normalizeProvinceName(params.name),
+                            color: "#203e38",
+                            fontSize: 11,
+                            fontWeight: 500,
+                            textBorderColor: "#f8faf3",
+                            textBorderWidth: 3
+                        },
                         itemStyle: {
                             areaColor: "#bbcebc",
                             borderColor: "#ffffff",
@@ -721,7 +742,9 @@
                                 areaColor: "#a58146"
                             },
                             label: {
+                                show: true,
                                 color: "#fff",
+                                textBorderWidth: 0,
                                 fontWeight: 700
                             }
                         },
@@ -729,9 +752,9 @@
                             itemStyle: {
                                 areaColor: "#315e50"
                             },
-                            label: { color: "#fff" }
+                            label: { show: true, color: "#fff", textBorderWidth: 0 }
                         },
-                        data: provincesData.map(item => ({ name: item.name, value: 1 }))
+                        data: geoJson.features.map(feature => ({ name: feature.properties.name, value: 1 }))
                     }
                 ]
             };
@@ -806,6 +829,9 @@
 
         function showProvinceDetail(prov) {
             modalName.innerHTML = `${prov.emoji} ${prov.name}`;
+            const guide = window.cityGuides?.[normalizeProvinceName(prov.name)];
+            document.getElementById("modalCityIntro").textContent = guide?.intro || prov.desc;
+            document.getElementById("modalCityExperience").textContent = guide?.experience || "从一处喜欢的景点开始，留些时间给街巷漫步与当地美食。";
             const photo = window.cityImages?.[normalizeProvinceName(prov.name)];
             const photoFigure = document.getElementById("modalCityPhoto");
             const photoImage = document.getElementById("modalCityImage");
@@ -841,12 +867,12 @@
                 }
             }
             modalDesc.innerText = prov.desc;
-            modalSpecialty.innerText = `✨ 省份特色: ${prov.specialty}`;
+            modalSpecialty.innerText = `✨ 城市特色: ${prov.specialty}`;
             modalAttractions.innerText = `📍 必游景点: ${prov.attractions}`;
             modalFood.innerText = `🍜 地道美食: ${prov.food}`;
             modalSeason.innerText = `🗓️ 推荐季节: ${prov.season}`;
             modal.classList.add("show");
-            modal.querySelector(".province-modal").scrollTop = 0;
+            modal.querySelector(".province-modal-content").scrollTop = 0;
             // 绑定“去讨论区”按钮: 关闭弹窗，切首页并滚动到讨论区
             const gotoBtn = document.getElementById("gotoDiscussBtn");
             const newGoto = gotoBtn.cloneNode(true);
