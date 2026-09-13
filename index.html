@@ -417,7 +417,7 @@
             pointer-events: none;
         }
     </style>
-    <link rel="stylesheet" href="assets/theme.css">
+    <link rel="stylesheet" href="assets/theme.css?v=20260914-photo2">
     <link rel="stylesheet" href="assets/blindbox.css">
 </head>
 
@@ -543,7 +543,7 @@
             <div>
                 <div class="section-title"><i class="fas fa-receipt"></i> 近期订单</div>
                 <div class="order-item"><i class="fas fa-map-pin"></i> 黄山·迎客松盲盒 · 已完成</div>
-                <div class="order-item"><i class="fas fa-mask"></i> 合肥剧本游《包公奇案》 · 待体验</div>
+                <div class="order-item"><i class="fas fa-compass"></i> 合肥剧本游《包公奇案》 · 待体验</div>
                 <div class="order-item"><i class="fas fa-ticket-alt"></i> 芜湖方特乐园·数字门票</div>
             </div>
         </div>
@@ -563,7 +563,7 @@
             <div class="province-modal-content">
                 <h3 id="modalProvinceName"></h3>
                 <figure class="city-photo" id="modalCityPhoto" hidden>
-                    <img id="modalCityImage" alt="" decoding="async">
+                    <img id="modalCityImage" alt="" width="96" height="76" decoding="async">
                     <figcaption>
                         <span id="modalCityImageCaption"></span>
                         <span class="city-photo-credit" id="modalCityImageCredit"></span>
@@ -577,6 +577,14 @@
                     <div class="province-info-item" id="modalSeason"></div>
                 </div>
                 <p id="modalProvinceDesc"></p>
+                <section class="city-guide-note" aria-labelledby="modalCitySceneryTitle">
+                    <h4 id="modalCitySceneryTitle">值得细看的风景</h4>
+                    <p id="modalCityScenery"></p>
+                </section>
+                <section class="city-guide-note" aria-labelledby="modalCityCuisineTitle">
+                    <h4 id="modalCityCuisineTitle">尝一口当地风味</h4>
+                    <p id="modalCityCuisine"></p>
+                </section>
                 <section class="city-guide-note" aria-labelledby="modalCityGuideTitle">
                     <h4 id="modalCityGuideTitle">这样认识这座城</h4>
                     <p id="modalCityExperience"></p>
@@ -590,7 +598,7 @@
     </div>
 
     <script src="picture/cities.js"></script>
-    <script src="assets/city-guides.js"></script>
+    <script src="assets/city-guides.js?v=20260914-expanded"></script>
     <script>
         // ---------- 安徽市级数据 ----------
         const provincesData = [
@@ -601,7 +609,7 @@
             { name: "马鞍山", emoji: "🏞️", desc: "诗城钢都，采石矶畔", attractions: "采石矶、雨山湖", specialty: "诗歌之城", food: "马鞍山板面、采石矶鱼头", season: "春秋皆宜" },
             { name: "淮北", emoji: "🏭", desc: "皖北煤城，古邑新姿", attractions: "隋唐运河古镇、相山公园", specialty: "煤炭基地", food: "淮北烧鸡、牛肉板面", season: "秋季适合" },
             { name: "铜陵", emoji: "🥉", desc: "铜都新貌，长江明珠", attractions: "天井湖、铜官山", specialty: "有色金属", food: "铜陵酥糖、铜官鱼头", season: "春秋适宜" },
-            { name: "安庆", emoji: "🎭", desc: "黄梅戏乡，皖江门户", attractions: "天柱山、迎江寺", specialty: "戏曲之乡", food: "安庆小吃、黄梅酥", season: "春秋最佳" },
+            { name: "安庆", emoji: "⛰️", desc: "黄梅戏乡，皖江门户", attractions: "天柱山、迎江寺", specialty: "戏曲之乡", food: "安庆小吃、黄梅酥", season: "春秋最佳" },
             { name: "黄山", emoji: "⛰️", desc: "天下奇山，徽州古韵", attractions: "黄山风景区、西递宏村", specialty: "徽文化", food: "毛豆腐、臭鳜鱼", season: "四季皆宜" },
             { name: "滁州", emoji: "🍃", desc: "琅琊古郡，醉翁之意", attractions: "琅琊山、明中都遗址", specialty: "醉翁故里", food: "滁菊、全椒酥笏牌", season: "春秋适合" },
             { name: "阜阳", emoji: "🌾", desc: "皖北粮仓，颍淮明珠", attractions: "颍州西湖、八里河", specialty: "农业大市", food: "阜阳牛肉馍、格拉条", season: "秋季丰收" },
@@ -805,7 +813,7 @@
             { avatar: "⛰️", text: "黄山：云海日出太震撼！强烈推荐冬天来爬山" },
             { avatar: "🏙️", text: "合肥：包公园的春天很美，适合全家出游" },
             { avatar: "🚤", text: "芜湖：方特乐园超好玩，孩子们都不想走" },
-            { avatar: "🎭", text: "安庆：黄梅戏现场太精彩了，文化氛围浓厚" },
+            { avatar: "⛰️", text: "安庆：黄梅戏现场太精彩了，文化氛围浓厚" },
             { avatar: "🌲", text: "六安：天堂寨的秋色美如画，拍照圣地" }
         ];
         function renderDiscuss() {
@@ -832,6 +840,8 @@
             const guide = window.cityGuides?.[normalizeProvinceName(prov.name)];
             document.getElementById("modalCityIntro").textContent = guide?.intro || prov.desc;
             document.getElementById("modalCityExperience").textContent = guide?.experience || "从一处喜欢的景点开始，留些时间给街巷漫步与当地美食。";
+            document.getElementById("modalCityScenery").textContent = guide?.scenery || prov.attractions;
+            document.getElementById("modalCityCuisine").textContent = guide?.cuisine || prov.food;
             const photo = window.cityImages?.[normalizeProvinceName(prov.name)];
             const photoFigure = document.getElementById("modalCityPhoto");
             const photoImage = document.getElementById("modalCityImage");

@@ -104,10 +104,6 @@ footer { color: var(--muted); letter-spacing: 2px; }
     .province-modal { width: calc(100% - 32px); max-height: 88dvh; border-radius: 20px; }
     .province-modal-content { padding: 16px 16px 4px; }
     .province-modal h3 { font-size: 23px; margin-bottom: 12px; }
-    .city-photo { margin: 0 auto 12px; max-width: 300px; border-radius: 12px; }
-    .city-photo img { height: clamp(90px, 18dvh, 125px); }
-    .city-photo figcaption { padding: 7px 10px; font-size: 11px; }
-    .city-photo-credit { font-size: 9px; margin-top: 2px; line-height: 1.5; }
     body { padding: 0; }
     .app-container { height: 100dvh; min-height: 0; border: 0; border-radius: 0; }
     .page-content { padding: 24px 18px; }
@@ -118,6 +114,14 @@ footer { color: var(--muted); letter-spacing: 2px; }
     .map-toolbar { padding: 4px 0 12px; }
     .rank-discuss { padding: 18px; }
     .feature-title { font-size: 26px; }
+}
+/* 手机上使用图文并排的小卡片；固定像素兼容不支持 dvh 的浏览器。 */
+@media (max-width: 799px), (hover: none) and (pointer: coarse) {
+    .city-photo { display: flex; align-items: center; gap: 10px; margin: 0 0 12px; padding: 8px; border-radius: 12px; }
+    .city-photo[hidden] { display: none; }
+    .city-photo img { flex: 0 1 96px; width: 96px; max-width: 35%; min-width: 0; height: 76px; max-height: 76px; border-radius: 6px; object-fit: contain; }
+    .city-photo figcaption { flex: 1; min-width: 0; padding: 0; font-size: 11px; line-height: 1.5; }
+    .city-photo-credit { font-size: 9px; margin-top: 3px; line-height: 1.5; }
 }
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
