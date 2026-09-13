@@ -67,10 +67,6 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
 .discuss-item { line-height: 1.8; border: 1px solid #edf0e6; background: #f6f7f1; border-radius: 14px; padding: 14px; }
 .discuss-item:last-child { margin-bottom: 0; }
 .script-card { background: #fffefa; border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 20px; }
-.blind-face { border-color: #dce3d2; border-radius: 18px; box-shadow: 0 8px 20px #203e380a; }
-.blind-front { background: linear-gradient(135deg, #eff3e8, #faf9f1); color: #365948; }
-.blind-back { background: linear-gradient(135deg, #e7eedd, #dce8d3); color: #365948; }
-.blind-hint, .blind-reward { color: #526756; }
 .profile-card { background: linear-gradient(125deg, #e7ecdf, #faf9f1); border: 1px solid var(--line); border-radius: 24px; }
 .stat-number { color: #315e50; }
 .order-item { background: #fffefa; border: 1px solid var(--line); border-radius: 16px; }
@@ -95,8 +91,6 @@ footer { color: var(--muted); letter-spacing: 2px; }
     .discussion-panel { grid-row: 4; }
     #scriptList { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 24px; }
     .script-card { margin: 0; padding: 26px; }
-    .blindbox-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
-    .blind-item { width: 100%; height: 190px; }
 }
 @media (max-width: 799px) {
     body { padding: 0; }
@@ -106,8 +100,6 @@ footer { color: var(--muted); letter-spacing: 2px; }
     .map-header .map-title { font-size: 30px; }
     .map-tip { padding: 0; background: transparent; border: 0; font-size: 11px; }
     .map-toolbar { padding: 4px 0 12px; }
-    .blind-face { padding: 10px 4px; }
-    .blind-name { font-size: 12px; }
     .rank-discuss { padding: 18px; }
     .feature-title { font-size: 26px; }
 }

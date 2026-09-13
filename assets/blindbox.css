@@ -1,0 +1,87 @@
+/* Single keepsake box, drawn locally with CSS. */
+.blindbox-heading { text-align: center; padding-top: 16px; }
+.blindbox-heading .map-title { font-size: clamp(26px, 4vw, 36px); font-weight: 400; }
+.blindbox-heading .sub { margin-top: 12px; font-size: 13px; }
+.blindbox-experience { max-width: 620px; margin: 18px auto 0; text-align: center; }
+.blindbox-scene { display: grid; place-items: center; min-height: 420px; isolation: isolate; }
+.gift-trigger, .blindbox-result { grid-area: 1 / 1; }
+.gift-trigger {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 420px;
+    padding: 40px 0 20px;
+    border: 0;
+    border-radius: 28px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 0.45s ease, transform 0.6s ease, visibility 0.45s;
+}
+.gift-trigger:disabled { cursor: default; }
+.gift-halo { position: absolute; top: 26px; width: 330px; max-width: 100%; aspect-ratio: 1; border: 1px solid #a5814624; border-radius: 50%; background: radial-gradient(circle, #e6ddbb88, #e9eddf44 55%, transparent 70%); z-index: -1; }
+.gift-halo::before { content: ''; position: absolute; inset: 20px; border: 1px dashed #a5814620; border-radius: 50%; }
+.gift-art { position: relative; display: block; width: 224px; height: 224px; margin: 28px 0 35px; transform-origin: 50% 90%; }
+.gift-art::after { content: ''; position: absolute; width: 220px; height: 24px; left: 2px; bottom: -20px; border-radius: 50%; background: #203e3825; filter: blur(12px); z-index: -1; }
+.gift-body { position: absolute; inset: 49px 6px 0; overflow: hidden; border-radius: 4px 4px 18px 18px; background: linear-gradient(120deg, #426b58, #234739 65%, #193a30); border: 1px solid #617e58; box-shadow: inset 0 3px 12px #102b3266, inset -12px 0 20px #102b3222, 12px 18px 30px #203e3820; }
+.gift-body::before { content: ''; position: absolute; inset: 13px; border: 1px solid #c9b77b66; border-radius: 2px 2px 8px 8px; }
+.gift-body::after { content: ''; position: absolute; top: 0; bottom: 0; left: calc(50% - 17px); width: 34px; background: linear-gradient(90deg, #b5995a, #e3cf96 45%, #ad8d4e); opacity: 0.95; }
+.gift-mountains { position: absolute; inset: 50px 0 0; background: linear-gradient(140deg, #a6b58b33, #c7be8933); clip-path: polygon(0 75%, 18% 32%, 30% 60%, 51% 4%, 72% 48%, 84% 27%, 100% 70%, 100% 100%, 0 100%); }
+.gift-seal { position: absolute; z-index: 1; top: 54px; left: calc(50% - 29px); display: grid; place-items: center; width: 58px; height: 58px; border: 3px double #d6bd7d; border-radius: 50%; background: #244838; color: #eedda9; font: 32px 'ZCOOL XiaoWei', serif; box-shadow: 0 4px 8px #122a3433; }
+.gift-inscription { position: absolute; z-index: 1; left: 20px; top: 32px; writing-mode: vertical-rl; font: 12px 'ZCOOL XiaoWei', serif; color: #d9cb9d; letter-spacing: 5px; }
+.gift-lid { position: absolute; z-index: 3; top: 22px; left: 0; width: 224px; height: 44px; border: 1px solid #78906d; border-radius: 8px 8px 4px 4px; background: linear-gradient(160deg, #628068, #315540 80%); box-shadow: 0 7px 9px #142f3444, inset 0 3px #ffffff12; transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease; }
+.gift-lid::after { content: ''; position: absolute; top: 0; bottom: 0; left: calc(50% - 19px); width: 38px; background: linear-gradient(90deg, #b79a5b, #e4d19a 45%, #ad8d4e); }
+.gift-bow { position: absolute; top: -27px; left: 50%; z-index: 1; }
+.gift-bow::before, .gift-bow::after { content: ''; position: absolute; width: 49px; height: 28px; border: 8px solid #cbb477; box-shadow: inset 0 1px 2px #fff7d4, 0 2px 2px #1f392a33; }
+.gift-bow::before { right: -3px; border-radius: 70% 80% 0 70%; transform: rotate(18deg); }
+.gift-bow::after { left: -3px; border-radius: 80% 70% 70% 0; transform: rotate(-18deg); }
+.gift-glow { position: absolute; inset: -40px -30px; background: radial-gradient(ellipse, #ffe5a5bb, #e5d7ad44 40%, transparent 70%); opacity: 0; transition: opacity 0.5s; }
+.gift-invitation { font-size: 12px; letter-spacing: 3px; color: #7b795f; }
+.gift-trigger:not(:disabled):hover .gift-art { transform: translateY(-5px); }
+.gift-trigger:not(:disabled) .gift-art { transition: transform 0.3s ease; }
+.is-shaking .gift-art { animation: giftShake 0.85s ease-in-out both; }
+.is-opening .gift-lid { transform: translate(-18px, -90px) rotate(-14deg); opacity: 0; }
+.is-opening .gift-glow { opacity: 1; }
+.is-revealed .gift-trigger { opacity: 0; transform: translateY(18px) scale(0.88); visibility: hidden; pointer-events: none; }
+.blindbox-result { position: relative; width: min(100%, 390px); padding: 28px 26px; border: 1px solid #cbb98788; border-radius: 24px; background: linear-gradient(150deg, #fffef8, #f2f3e8); box-shadow: 0 18px 45px #203e3810; animation: giftReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.blindbox-result[hidden] { display: none; }
+.blindbox-result .eyebrow { font-size: 9px; }
+.blindbox-result-icon { font-size: 40px; margin: 12px 0 4px; }
+.blindbox-result h2 { font: 30px 'ZCOOL XiaoWei', serif; color: var(--ink); margin: 8px 0; }
+.blindbox-result h2:focus { outline: none; }
+.blindbox-result-desc { font-size: 13px; color: var(--muted); margin: 12px 0 22px; }
+.blindbox-keepsake { display: flex; flex-direction: column; gap: 6px; padding: 16px 8px; border-top: 1px dashed #c3b58c88; border-bottom: 1px dashed #c3b58c88; }
+.blindbox-keepsake span { font-size: 10px; letter-spacing: 3px; color: #82704c; }
+.blindbox-keepsake strong { font-size: 16px; font-weight: 500; }
+.blindbox-result-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.blindbox-result-actions button { padding: 10px 16px; font-size: 12px; }
+.blindbox-status { min-height: 24px; margin: 10px 0; color: #637364; font-size: 12px; }
+.blindbox-footnote { font-size: 10px; color: #7c8274; letter-spacing: 2px; margin: 16px 0; }
+@keyframes giftShake {
+    0%, 100% { transform: translateX(0) rotate(0); }
+    15% { transform: translateX(-3px) rotate(-3deg); }
+    30% { transform: translateX(4px) rotate(4deg); }
+    45% { transform: translateX(-5px) rotate(-5deg); }
+    60% { transform: translateX(5px) rotate(5deg); }
+    75% { transform: translateX(-3px) rotate(-3deg); }
+    90% { transform: translateX(2px) rotate(2deg); }
+}
+@keyframes giftReveal {
+    from { opacity: 0; transform: translateY(28px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (max-width: 480px) {
+    .blindbox-heading { padding-top: 8px; }
+    .blindbox-heading .eyebrow { font-size: 9px; letter-spacing: 2px; }
+    .blindbox-experience { margin-top: 0; }
+    .blindbox-scene, .gift-trigger { min-height: 395px; }
+    .blindbox-result { padding: 24px 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .gift-art, .blindbox-result { animation: none; }
+    .gift-trigger, .gift-lid, .gift-glow, .gift-art { transition: none !important; }
+}

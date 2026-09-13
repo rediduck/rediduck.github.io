@@ -343,89 +343,6 @@
             transition: 0.2s;
         }
 
-        /* 盲盒网格 */
-        .blindbox-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-            justify-content: space-between;
-            margin: 16px 0;
-            perspective: 1200px;
-        }
-
-        .blind-item {
-            width: calc(33.33% - 10px);
-            height: 148px;
-            border-radius: 24px;
-            position: relative;
-            cursor: pointer;
-            transform-style: preserve-3d;
-            transition: transform 0.65s cubic-bezier(0.2, 0.7, 0.2, 1);
-        }
-
-        .blind-item.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .blind-face {
-            position: absolute;
-            inset: 0;
-            border-radius: 24px;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 12px 8px;
-            border: 1px solid #ffe2cf;
-            box-shadow: 0 10px 18px rgba(0, 0, 0, 0.06);
-        }
-
-        .blind-front {
-            background: linear-gradient(135deg, #fff5ed, #fffbf5);
-            color: #a44f2b;
-        }
-
-        .blind-back {
-            background: linear-gradient(135deg, #fff0e4, #ffe6d3);
-            transform: rotateY(180deg);
-            color: #8d3f1f;
-        }
-
-        .blind-item:hover {
-            transform: translateY(-4px);
-        }
-
-        .blind-item.flipped:hover {
-            transform: rotateY(180deg) translateY(-4px);
-        }
-
-        .blind-icon {
-            font-size: 36px;
-            line-height: 1;
-        }
-
-        .blind-name {
-            font-weight: 800;
-            margin-top: 8px;
-            font-size: 14px;
-        }
-
-        .blind-hint {
-            margin-top: 6px;
-            font-size: 11px;
-            color: #ff8a5c;
-        }
-
-        .blind-reward {
-            margin-top: 8px;
-            font-size: 11px;
-            color: #743016;
-            font-weight: 600;
-        }
-
         /* 我的页面 */
         .profile-card {
             background: linear-gradient(125deg, #fff2ea, #fff9f4);
@@ -501,6 +418,7 @@
         }
     </style>
     <link rel="stylesheet" href="assets/theme.css">
+    <link rel="stylesheet" href="assets/blindbox.css">
 </head>
 
 <body>
@@ -561,9 +479,37 @@
 
         <!-- 盲盒页面 -->
         <div id="page-blindbox" class="page page-content">
-            <div class="map-title" style="font-size: 26px;"><i class="fas fa-gift"></i> 惊喜盲盒</div>
-            <div class="sub">点击任意盲盒，抽取省份限定礼遇</div>
-            <div id="blindboxContainer" class="blindbox-grid"></div>
+            <div class="blindbox-heading">
+                <div class="eyebrow">A LITTLE SURPRISE · ANHUI</div>
+                <div class="map-title">把下一站，交给惊喜</div>
+                <div class="sub">一份山水来信，藏着与你有缘的安徽。</div>
+            </div>
+            <div id="blindboxContainer" class="blindbox-experience">
+                <div class="blindbox-scene">
+                    <button class="gift-trigger" id="openBlindboxBtn" type="button" aria-label="开启安徽文旅盲盒">
+                        <span class="gift-halo" aria-hidden="true"></span>
+                        <span class="gift-art" aria-hidden="true">
+                            <span class="gift-glow"></span>
+                            <span class="gift-body"><span class="gift-mountains"></span><span class="gift-seal">皖</span><span class="gift-inscription">山水藏心意</span></span>
+                            <span class="gift-lid"><span class="gift-bow"></span></span>
+                        </span>
+                        <span class="gift-invitation">轻触礼盒 · 开启一城惊喜</span>
+                    </button>
+                    <section class="blindbox-result" id="blindboxResult" hidden aria-labelledby="blindboxResultTitle">
+                        <div class="eyebrow">YOUR NEXT DESTINATION</div>
+                        <div class="blindbox-result-icon" id="blindboxResultIcon" aria-hidden="true"></div>
+                        <h2 id="blindboxResultTitle" tabindex="-1"></h2>
+                        <p class="blindbox-result-desc" id="blindboxResultDesc"></p>
+                        <div class="blindbox-keepsake"><span>此行的小惊喜</span><strong id="blindboxResultReward"></strong></div>
+                        <div class="blindbox-result-actions">
+                            <button class="btn-sm" id="blindboxDetailBtn" type="button">探索这座城 <span aria-hidden="true">↗</span></button>
+                            <button class="btn-sm btn-outline" id="resetBlindboxBtn" type="button">再开一次</button>
+                        </div>
+                    </section>
+                </div>
+                <p class="blindbox-status" id="blindboxStatus" role="status" aria-live="polite">十六座城，等一次不期而遇</p>
+                <div class="blindbox-footnote">安徽风物收藏 · 礼遇为互动演示</div>
+            </div>
         </div>
 
         <!-- 我的页面 -->
@@ -962,38 +908,63 @@
             `).join("");
         }
 
-        // 盲盒渲染及开盒效果
+        // 单盒状态流：待开启 → 震动 → 开盖 → 揭晓。切换页面时保留本轮状态。
+        let blindboxState = "ready";
+        let blindboxSelection = null;
+        const blindboxRewards = ["徽州文创帆布袋", "黄山特色明信片套装", "徽菜美食体验券", "安徽限定冰箱贴", "山水旅行手账"];
+
         function renderBlindbox() {
-            const blindContainer = document.getElementById("blindboxContainer");
-            // 随机抽取12个省份
-            const shuffled = [...provincesData].sort(() => Math.random() - 0.5);
-            const selected = shuffled.slice(0, 12);
-            blindContainer.innerHTML = selected.map(prov => `
-            <div class="blind-item" data-province="${prov.name}" data-emoji="${prov.emoji}" data-desc="${prov.desc}">
-                <div class="blind-face blind-front">
-                    <div class="blind-icon">🎴</div>
-                    <div class="blind-name">安徽文旅盲盒</div>
-                    <div class="blind-hint">点击翻开安徽惊喜</div>
-                </div>
-                <div class="blind-face blind-back">
-                    <div class="blind-icon">${prov.emoji}</div>
-                    <div class="blind-name">${prov.name}</div>
-                    <div class="blind-reward">已揭晓本轮盲盒</div>
-                </div>
-            </div>
-        `).join("");
-            // 盲盒点击开盒特效
-            document.querySelectorAll(".blind-item").forEach(el => {
-                el.addEventListener("click", () => {
-                    el.classList.toggle("flipped");
-                    const provinceName = el.getAttribute("data-province");
-                    const emoji = el.getAttribute("data-emoji");
-                    const desc = el.getAttribute("data-desc");
-                    const rewards = ["安徽景区门票5折券", "徽州文创帆布袋", "黄山特色明信片套装", "徽菜美食体验券", "安徽限定冰箱贴"];
-                    const randomReward = rewards[Math.floor(Math.random() * rewards.length)];
-                    const rewardArea = el.querySelector(".blind-reward");
-                    if (rewardArea) rewardArea.textContent = `${emoji} ${provinceName} · ${randomReward}`;
-                });
+            const container = document.getElementById("blindboxContainer");
+            if (container.dataset.initialized) return;
+            container.dataset.initialized = "true";
+            const openButton = document.getElementById("openBlindboxBtn");
+            const result = document.getElementById("blindboxResult");
+            const status = document.getElementById("blindboxStatus");
+
+            openButton.addEventListener("click", () => {
+                if (blindboxState !== "ready") return;
+                blindboxState = "shaking";
+                openButton.disabled = true;
+                container.classList.add("is-shaking");
+                status.textContent = "惊喜正在苏醒，听见山水的回音了吗？";
+                blindboxSelection = provincesData[Math.floor(Math.random() * provincesData.length)];
+                const reward = blindboxRewards[Math.floor(Math.random() * blindboxRewards.length)];
+                const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+                setTimeout(() => {
+                    blindboxState = "opening";
+                    container.classList.remove("is-shaking");
+                    container.classList.add("is-opening");
+                }, reducedMotion ? 0 : 850);
+
+                setTimeout(() => {
+                    blindboxState = "revealed";
+                    document.getElementById("blindboxResultIcon").textContent = blindboxSelection.emoji;
+                    document.getElementById("blindboxResultTitle").textContent = `下一站，${blindboxSelection.name}`;
+                    document.getElementById("blindboxResultDesc").textContent = blindboxSelection.desc;
+                    document.getElementById("blindboxResultReward").textContent = reward;
+                    result.hidden = false;
+                    container.classList.add("is-revealed");
+                    status.textContent = `已为你揭晓：${blindboxSelection.name} · ${reward}`;
+                    if (document.getElementById("page-blindbox").classList.contains("active-page")) {
+                        document.getElementById("blindboxResultTitle").focus({ preventScroll: true });
+                    }
+                }, reducedMotion ? 30 : 1450);
+            });
+
+            document.getElementById("resetBlindboxBtn").addEventListener("click", () => {
+                if (blindboxState !== "revealed") return;
+                blindboxState = "ready";
+                blindboxSelection = null;
+                result.hidden = true;
+                container.classList.remove("is-shaking", "is-opening", "is-revealed");
+                openButton.disabled = false;
+                status.textContent = "十六座城，等一次不期而遇";
+                openButton.focus({ preventScroll: true });
+            });
+
+            document.getElementById("blindboxDetailBtn").addEventListener("click", () => {
+                if (blindboxState === "revealed" && blindboxSelection) showProvinceDetail(blindboxSelection);
             });
         }
 
@@ -1012,7 +983,7 @@
                 }, 160);
             }
             if (pageId === 'blindbox') {
-                renderBlindbox();   // 保证盲盒列表渲染
+                renderBlindbox();   // 只绑定一次交互，保留开盒结果
             }
             if (pageId === 'script') {
                 renderScripts();
