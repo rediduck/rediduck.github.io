@@ -615,6 +615,13 @@
     <div id="provinceModal" class="modal-mask">
         <div class="province-modal">
             <h3 id="modalProvinceName"></h3>
+            <figure class="city-photo" id="modalCityPhoto" hidden>
+                <img id="modalCityImage" alt="" decoding="async">
+                <figcaption>
+                    <span id="modalCityImageCaption"></span>
+                    <span class="city-photo-credit" id="modalCityImageCredit"></span>
+                </figcaption>
+            </figure>
             <div class="province-info-list">
                 <div class="province-info-item" id="modalSpecialty"></div>
                 <div class="province-info-item" id="modalAttractions"></div>
@@ -629,6 +636,7 @@
         </div>
     </div>
 
+    <script src="picture/cities.js"></script>
     <script>
         // ---------- 安徽市级数据 ----------
         const provincesData = [
@@ -852,12 +860,47 @@
 
         function showProvinceDetail(prov) {
             modalName.innerHTML = `${prov.emoji} ${prov.name}`;
+            const photo = window.cityImages?.[normalizeProvinceName(prov.name)];
+            const photoFigure = document.getElementById("modalCityPhoto");
+            const photoImage = document.getElementById("modalCityImage");
+            const photoCaption = document.getElementById("modalCityImageCaption");
+            const photoCredit = document.getElementById("modalCityImageCredit");
+            photoFigure.hidden = !photo;
+            photoImage.removeAttribute("src");
+            photoImage.alt = "";
+            photoCaption.textContent = "";
+            photoCredit.replaceChildren();
+            if (photo) {
+                photoImage.alt = `${prov.name} · ${photo.caption}`;
+                photoCaption.textContent = photo.caption;
+                photoImage.onerror = () => {
+                    photoFigure.hidden = true;
+                };
+                photoImage.src = photo.src;
+                const sourceLink = document.createElement("a");
+                sourceLink.href = photo.source;
+                sourceLink.target = "_blank";
+                sourceLink.rel = "noopener noreferrer";
+                sourceLink.textContent = photo.author;
+                photoCredit.append("图片：", sourceLink, " · ");
+                if (photo.licenseUrl) {
+                    const licenseLink = document.createElement("a");
+                    licenseLink.href = photo.licenseUrl;
+                    licenseLink.target = "_blank";
+                    licenseLink.rel = "noopener noreferrer";
+                    licenseLink.textContent = photo.license;
+                    photoCredit.append(licenseLink);
+                } else {
+                    photoCredit.append(photo.license);
+                }
+            }
             modalDesc.innerText = prov.desc;
             modalSpecialty.innerText = `✨ 省份特色: ${prov.specialty}`;
             modalAttractions.innerText = `📍 必游景点: ${prov.attractions}`;
             modalFood.innerText = `🍜 地道美食: ${prov.food}`;
             modalSeason.innerText = `🗓️ 推荐季节: ${prov.season}`;
             modal.classList.add("show");
+            modal.querySelector(".province-modal").scrollTop = 0;
             // 绑定“去讨论区”按钮: 关闭弹窗，切首页并滚动到讨论区
             const gotoBtn = document.getElementById("gotoDiscussBtn");
             const newGoto = gotoBtn.cloneNode(true);
