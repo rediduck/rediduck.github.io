@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>文旅盲盒 · 漫游安徽</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -500,6 +500,7 @@
             pointer-events: none;
         }
     </style>
+    <link rel="stylesheet" href="assets/theme.css">
 </head>
 
 <body>
@@ -507,18 +508,24 @@
         <!-- 首页 -->
         <div id="page-home" class="page active-page page-content">
             <div class="map-header">
-                <div class="map-title">文旅盲盒</div>
-                <div class="sub">指尖漫游 · 寻梦山河</div>
+                <div class="brand-row">
+                    <div>
+                        <div class="eyebrow">ANHUI · TRAVEL COLLECTION</div>
+                        <div class="map-title">山水有约，漫游安徽</div>
+                        <div class="sub">一城一故事，一盒一惊喜。开启你的徽州漫游。</div>
+                    </div>
+                    <span class="brand-seal">皖里寻趣</span>
+                </div>
             </div>
 
             <!-- 滑动节假日活动 swiper -->
             <div class="swiper-container swiper-holiday">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">🌸 黄山迎客松节 · 春日限定</div>
-                    <div class="swiper-slide">🏮 合肥庐州灯会 · 灯火璀璨</div>
-                    <div class="swiper-slide">🎡 芜湖方特狂欢节 · 欢乐无限</div>
-                    <div class="swiper-slide">🍁 九华山祈福季 · 金秋祈愿</div>
-                    <div class="swiper-slide">❄️ 天柱山雪景节 · 冬日仙境</div>
+                    <div class="swiper-slide"><div><div class="feature-kicker">01 / 山野之旅</div><div class="feature-title">黄山云海 · 山间来信</div><div class="feature-caption">循着松风与云雾，收藏山野的诗意。</div></div></div>
+                    <div class="swiper-slide"><div><div class="feature-kicker">02 / 古城漫步</div><div class="feature-title">庐州街巷 · 慢游时光</div><div class="feature-caption">从包公园到三河古镇，寻访一城故事。</div></div></div>
+                    <div class="swiper-slide"><div><div class="feature-kicker">03 / 江城假日</div><div class="feature-title">芜湖漫游 · 江畔拾光</div><div class="feature-caption">在江风与街巷之间，遇见悠闲假日。</div></div></div>
+                    <div class="swiper-slide"><div><div class="feature-kicker">04 / 寻山问水</div><div class="feature-title">九华山行 · 静听松风</div><div class="feature-caption">把脚步放慢，走进皖南山水。</div></div></div>
+                    <div class="swiper-slide"><div><div class="feature-kicker">05 / 山居手记</div><div class="feature-title">天柱奇峰 · 自在山间</div><div class="feature-caption">沿着山路出发，把风景写进旅途。</div></div></div>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
@@ -534,15 +541,15 @@
             </div>
 
             <!-- 排行榜 + 讨论区 -->
-            <div class="rank-discuss">
-                <div class="section-title"><i class="fas fa-trophy" style="color:#ff9f4a;"></i> 人气省份榜</div>
+            <div class="rank-discuss ranking-panel">
+                <div class="section-title"><i class="fas fa-trophy" style="color:#a58146;"></i> 热门目的地<span class="section-note">固定精选 · 示例热度</span></div>
                 <ul class="rank-list" id="rankList"></ul>
             </div>
-            <div class="rank-discuss">
-                <div class="section-title"><i class="fas fa-comment-dots"></i> 旅友热议</div>
+            <div class="rank-discuss discussion-panel">
+                <div class="section-title"><i class="fas fa-comment-dots"></i> 旅友热议<span class="section-note">精选留言</span></div>
                 <div id="discussArea"></div>
             </div>
-            <footer>✨ 点击省份解锁详细攻略 ✨</footer>
+            <footer>十六座城，十六种心动 · 点击地图探索目的地</footer>
         </div>
 
         <!-- 剧本游页面 -->
@@ -562,7 +569,7 @@
         <!-- 我的页面 -->
         <div id="page-profile" class="page page-content">
             <div class="profile-card">
-                <i class="fas fa-hiking" style="font-size: 56px; color:#ff7a45;"></i>
+                <i class="fas fa-hiking" style="font-size: 56px; color:#315e50;"></i>
                 <h3 style="margin: 12px 0 4px;">山野旅人</h3>
                 <div class="stats-grid">
                     <div class="stat-cell">
@@ -597,10 +604,10 @@
 
         <!-- 底部导航栏 -->
         <div class="bottom-nav">
-            <div class="nav-item" data-page="home"><i class="fas fa-map-marked-alt"></i><span>首页</span></div>
-            <div class="nav-item" data-page="script"><i class="fas fa-scroll"></i><span>剧本游</span></div>
-            <div class="nav-item" data-page="blindbox"><i class="fas fa-gift"></i><span>盲盒</span></div>
-            <div class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>我的</span></div>
+            <button type="button" class="nav-item" data-page="home"><i class="fas fa-map-marked-alt"></i><span>首页</span></button>
+            <button type="button" class="nav-item" data-page="script"><i class="fas fa-scroll"></i><span>剧本游</span></button>
+            <button type="button" class="nav-item" data-page="blindbox"><i class="fas fa-gift"></i><span>盲盒</span></button>
+            <button type="button" class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>我的</span></button>
         </div>
     </div>
 
@@ -689,19 +696,44 @@
             };
         }
 
-        // 删除ensureAnhuiMapReady，直接在initAnhuiMap中fetch geojson
+        // HTTP 页面读取本地 JSON；file:// 页面通过本地脚本读取同一份地图数据。
+        async function loadAnhuiGeoJson() {
+            if (window.location.protocol === "file:") {
+                if (!window.anhuiGeoJson) {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement("script");
+                        script.src = "./assets/geo/anhui.js";
+                        script.onload = resolve;
+                        script.onerror = () => reject(new Error("本地地图脚本 assets/geo/anhui.js 无法读取，请确认文件完整"));
+                        document.head.appendChild(script);
+                    });
+                }
+                if (!window.anhuiGeoJson) throw new Error("本地地图脚本未提供地图数据");
+                return window.anhuiGeoJson;
+            }
+
+            const resp = await fetch("./assets/geo/anhui.json");
+            if (!resp.ok) throw new Error(`本地地图请求失败（HTTP ${resp.status}），请检查 assets/geo/anhui.json 路径`);
+            return resp.json();
+        }
 
         async function initAnhuiMap() {
             const mapEl = document.getElementById("anhuiMapCanvas");
-            if (!mapEl || !window.echarts) return;
+            if (!mapEl) return;
+            if (!window.echarts) {
+                mapEl.textContent = "地图绘图库 ECharts 加载失败，请检查网络后刷新。地图数据保存在本地，绘图库仍需联网加载。";
+                return;
+            }
 
             let geoJson;
             try {
-                const resp = await fetch("https://rediduck.github.io/assets/geo/anhui.json"); // 修改为从 GitHub Pages 加载
-                if (!resp.ok) throw new Error("地图资源加载失败");
-                geoJson = await resp.json();
+                geoJson = await loadAnhuiGeoJson();
+                if (geoJson.type !== "FeatureCollection" || !Array.isArray(geoJson.features) || !geoJson.features.length) {
+                    throw new Error("本地地图数据格式错误，需要包含城市边界的 GeoJSON 文件");
+                }
             } catch (e) {
-                mapEl.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#7a4a37;font-size:13px;text-align:center;padding:16px;">地图资源加载失败，请检查网络后刷新页面</div>';
+                console.error("安徽地图加载失败", e);
+                mapEl.textContent = `地图加载失败：${e.message}`;
                 return;
             }
 
@@ -726,13 +758,13 @@
                         zoom: 1.1,
                         scaleLimit: { min: 1, max: 6 },
                         itemStyle: {
-                            areaColor: "#ffd9bf",
+                            areaColor: "#bbcebc",
                             borderColor: "#ffffff",
                             borderWidth: 1
                         },
                         emphasis: {
                             itemStyle: {
-                                areaColor: "#ff8f5a"
+                                areaColor: "#a58146"
                             },
                             label: {
                                 color: "#fff",
@@ -741,7 +773,7 @@
                         },
                         select: {
                             itemStyle: {
-                                areaColor: "#2f5f9c"
+                                areaColor: "#315e50"
                             },
                             label: { color: "#fff" }
                         },
@@ -775,19 +807,19 @@
             });
         }
 
-        // 排行榜数据(根据热度动态模拟，让每次刷新不一样)
-        let rankListData = [];
-        function generateRanking() {
-            rankListData = [...provincesData].map(p => ({
-                name: p.name,
-                heat: Math.floor(Math.random() * 8000) + 2000
-            })).sort((a, b) => b.heat - a.heat).slice(0, 6);
-        }
+        // 固定精选榜单：顺序和示例热度不随刷新或页面切换变化。
+        const rankListData = [
+            { name: "黄山", heat: 9680 },
+            { name: "合肥", heat: 8920 },
+            { name: "芜湖", heat: 8560 },
+            { name: "池州", heat: 8120 },
+            { name: "安庆", heat: 7680 },
+            { name: "宣城", heat: 7350 }
+        ];
         function renderRanking() {
-            generateRanking();
             const rankUl = document.getElementById("rankList");
             rankUl.innerHTML = rankListData.map((item, idx) => `
-                <li><span><span style="display:inline-block; width:28px;">${idx + 1}</span> ${item.name}</span><span>🔥 ${item.heat} 热度</span></li>
+                <li><span><span class="rank-number">${String(idx + 1).padStart(2, "0")}</span> ${item.name}</span><span class="rank-heat">${item.heat.toLocaleString("zh-CN")} 热度</span></li>
             `).join("");
         }
 
@@ -881,7 +913,7 @@
                 <div class="script-card">
                     <div style="font-size:18px;font-weight:700;margin-bottom:6px;">${script.title}</div>
                     <div style="color:#7a4a37;font-size:13px;margin-bottom:8px;">${script.desc}</div>
-                    <div style="font-size:12px;color:#ff7a45;margin-bottom:4px;">⏳ 时长：${script.duration} &nbsp; 👥 人数：${script.people}</div>
+                    <div style="font-size:12px;color:#315e50;margin-bottom:4px;">⏳ 时长：${script.duration} &nbsp; 👥 人数：${script.people}</div>
                     <div style="font-size:12px;color:#4a5b6e;">${getScriptDetailText(script.title)}</div>
                 </div>
             `).join("");
@@ -930,10 +962,8 @@
                 if (item.getAttribute('data-page') === pageId) item.classList.add('active');
                 else item.classList.remove('active');
             });
-            // 按需刷新内容，保持最新数据
+            // 切回首页时调整地图尺寸，热点信息仅在初始化时渲染。
             if (pageId === 'home') {
-                renderRanking();    // 排行榜动态更新
-                renderDiscuss();
                 setTimeout(() => {
                     if (typeof anhuiMapChart !== 'undefined' && anhuiMapChart) anhuiMapChart.resize();
                 }, 160);
@@ -948,9 +978,9 @@
 
         // 初始化滑动Swiper
         function initSwiper() {
+            if (!window.Swiper) return;
             new Swiper('.swiper-holiday', {
                 loop: true,
-                autoplay: { delay: 2700, disableOnInteraction: false },
                 pagination: { el: '.swiper-pagination', clickable: true, dynamicBullets: true },
                 spaceBetween: 15,
             });

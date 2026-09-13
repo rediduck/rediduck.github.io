@@ -1,0 +1,110 @@
+:root {
+    --ink: #203e38;
+    --muted: #728078;
+    --paper: #f7f5ee;
+    --line: #e3e7dd;
+    --gold: #a58146;
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    padding: 32px;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at top left, #dce6db, transparent 55%), #eeeee6;
+    font-family: 'Noto Sans SC', sans-serif;
+    color: var(--ink);
+    line-height: 1.65;
+}
+button { font: inherit; }
+button:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+.app-container {
+    max-width: 1180px;
+    margin: 0 auto;
+    height: calc(100dvh - 64px);
+    min-height: 560px;
+    background: var(--paper);
+    border: 1px solid #ffffffcc;
+    border-radius: 28px;
+    box-shadow: 0 24px 70px -30px #203e3840;
+}
+.page-content { padding: 32px; min-height: 0; }
+.page-content::-webkit-scrollbar-thumb { background: #9aac98; }
+.bottom-nav { padding: 12px 20px max(12px, env(safe-area-inset-bottom)); flex-shrink: 0; }
+.nav-item { border: 0; background: transparent; padding: 8px 24px; border-radius: 16px; color: #6e7d76; }
+.nav-item.active { color: #315e50; background: #edf2e9; text-shadow: none; transform: none; }
+.nav-item i { font-size: 20px; }
+.brand-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.eyebrow { color: var(--gold); font-size: 11px; letter-spacing: 3px; margin-bottom: 8px; }
+.brand-seal { border: 1px solid var(--gold); color: var(--gold); padding: 8px; font-family: 'ZCOOL XiaoWei', serif; writing-mode: vertical-rl; letter-spacing: 4px; border-radius: 6px; flex-shrink: 0; }
+.map-title { background: none; color: var(--ink); letter-spacing: 2px; }
+.map-header .map-title { font-size: 38px; }
+.sub { color: var(--muted); line-height: 1.8; }
+.map-stage { border-radius: 22px; background: #edf1e7; border: 1px solid var(--line); box-shadow: 0 8px 24px #203e380a; }
+.map-tip { border-color: var(--line); color: #526756; }
+.map-reset-btn, .btn-sm { background: #315e50; box-shadow: none; }
+.map-reset-btn { flex-shrink: 0; }
+.btn-outline { color: #315e50; background: #edf2e9; border-color: #d6e0ce; }
+#anhuiMapCanvas { background: #f8faf3; border-radius: 16px; }
+.map-selected { border: 1px solid var(--line); color: #526756; border-radius: 12px; }
+.rank-discuss { border: 1px solid var(--line); border-radius: 22px; background: #fffefa; box-shadow: 0 8px 24px #203e3805; padding: 22px; }
+.section-title { color: var(--ink); }
+.rank-discuss .section-title { padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+.section-note { color: var(--muted); font-size: 11px; font-weight: 400; margin-left: auto; }
+.rank-list { padding: 0; margin: 0; }
+.rank-list li { border-color: var(--line); align-items: center; }
+.rank-list li:last-child { border-bottom: 0; }
+.rank-number { display: inline-block; width: 32px; font-family: Georgia, serif; color: var(--gold); font-size: 20px; }
+.rank-heat { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.swiper-holiday { position: relative; min-width: 0; border-radius: 20px; }
+.swiper-slide { position: relative; height: 190px; padding: 28px; justify-content: flex-start; overflow: hidden; border-radius: 20px; background: #24483d; color: #fff9e9; text-shadow: none; }
+.swiper-slide::after { content: ''; position: absolute; width: 260px; height: 260px; border: 1px solid #8f9e76; border-radius: 45%; right: -80px; bottom: -170px; transform: rotate(35deg); box-shadow: 0 0 0 30px #ffffff05, 0 0 0 60px #ffffff05, 0 0 0 90px #ffffff05; pointer-events: none; }
+.feature-kicker { font-size: 10px; letter-spacing: 3px; color: #d8c798; }
+.feature-title { font-family: 'ZCOOL XiaoWei', serif; font-size: 30px; margin: 8px 0; letter-spacing: 2px; }
+.feature-caption { font-size: 12px; color: #d6e0d2; font-weight: 400; }
+.swiper-pagination-bullet { background: #fff; }
+.swiper-pagination-bullet-active { background: #d8c798; }
+.discuss-item { line-height: 1.8; border: 1px solid #edf0e6; background: #f6f7f1; border-radius: 14px; padding: 14px; }
+.discuss-item:last-child { margin-bottom: 0; }
+.script-card { background: #fffefa; border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 20px; }
+.blind-face { border-color: #dce3d2; border-radius: 18px; box-shadow: 0 8px 20px #203e380a; }
+.blind-front { background: linear-gradient(135deg, #eff3e8, #faf9f1); color: #365948; }
+.blind-back { background: linear-gradient(135deg, #e7eedd, #dce8d3); color: #365948; }
+.blind-hint, .blind-reward { color: #526756; }
+.profile-card { background: linear-gradient(125deg, #e7ecdf, #faf9f1); border: 1px solid var(--line); border-radius: 24px; }
+.stat-number { color: #315e50; }
+.order-item { background: #fffefa; border: 1px solid var(--line); border-radius: 16px; }
+.province-modal { border-radius: 24px; max-width: 400px; max-height: 85dvh; overflow-y: auto; }
+.province-info-list { background: #f3f4ec; border-color: var(--line); }
+.province-info-item { color: #526756; }
+footer { color: var(--muted); letter-spacing: 2px; }
+@media (min-width: 800px) {
+    #page-home.active-page { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 24px; align-content: start; }
+    .map-header, #page-home footer { grid-column: 1 / -1; margin: 0; }
+    .swiper-holiday { grid-column: 1; margin: 0; }
+    .map-stage { grid-column: 1; grid-row: 3 / 5; margin: 0; }
+    #anhuiMapCanvas { height: 380px; }
+    .rank-discuss { grid-column: 2; margin: 0; }
+    .ranking-panel { grid-row: 2 / 4; }
+    .discussion-panel { grid-row: 4; }
+    #scriptList { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 24px; }
+    .script-card { margin: 0; padding: 26px; }
+    .blindbox-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+    .blind-item { width: 100%; height: 190px; }
+}
+@media (max-width: 799px) {
+    body { padding: 0; }
+    .app-container { height: 100dvh; min-height: 0; border: 0; border-radius: 0; }
+    .page-content { padding: 24px 18px; }
+    .nav-item { padding: 8px 16px; }
+    .map-header .map-title { font-size: 30px; }
+    .map-tip { padding: 0; background: transparent; border: 0; font-size: 11px; }
+    .map-toolbar { padding: 4px 0 12px; }
+    .blind-face { padding: 10px 4px; }
+    .blind-name { font-size: 12px; }
+    .rank-discuss { padding: 18px; }
+    .feature-title { font-size: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
