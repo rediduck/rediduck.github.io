@@ -25,8 +25,19 @@ Match the surrounding four-space indentation in HTML, CSS, and JavaScript; workf
 
 Manually check navigation, map selection and reset, destination modals, travel-script details, blind-box reveals, and carousel interaction. Verify narrow mobile and desktop layouts, scrolling, and browser console/network errors. There is no automated testing framework or coverage threshold.
 
-The map fetch currently targets `https://rediduck.github.io/assets/geo/anhui.json`; local GeoJSON edits will not appear unless the fetch is pointed at the local asset during validation.
+The map uses local data: HTTP/HTTPS loads `assets/geo/anhui.json`; direct `file://` previews load its JavaScript wrapper `assets/geo/anhui.js`. Keep both files synchronized after GeoJSON edits.
 
 ## Commit & Pull Request Guidelines
 
 Recent commits use short Chinese descriptions, commonly prefixed with `feat：` or `fix：`. Follow that style and keep each commit focused. Pull requests should describe the change, list manual checks, link relevant issues, and include screenshots for visual changes. Review carefully before merging to `main`, which triggers deployment.
+
+## Current Implementation Notes
+
+- The popularity ranking is fixed and the feature carousel does not autoplay.
+- `assets/theme.css` provides the responsive visual theme; `assets/blindbox.css` draws and animates the single blind box.
+- Clicking any of Anhui's 16 cities opens a local photo and expanded guide from `picture/cities.js` and `assets/city-guides.js`. Attribution is recorded in `picture/SOURCES.md`.
+- Mobile city photos use a compact 96 × 76 px layout. The map starts fitted to the province with city labels visible.
+- `assets/railway-landscape.svg` and `assets/travel.css` provide curved mountain layers, mist, a viaduct and a detailed train that changes direction when navigating between four evenly spaced stops.
+- The former profile page is now a static travel assistant (`assets/travel-assistant.js`): 16 cities, one/two-day route inspiration, blind-box destination reuse, a screenshot-ready travel card and a temporary packing checklist. It requires no account, localStorage or server persistence. Choices last only for the current page session.
+- Validate city/day selection, blind-box destination reuse, travel-card dismissal and the four navigation stops after editing these features. Browser/mobile visual validation remains outstanding when no connected browser is available.
+- The current implementation passed script-based checks for all 32 city/day combinations, card dismissal, destination reuse, four navigation stops and train reversal; these checks do not replace mobile visual review.

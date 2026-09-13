@@ -417,8 +417,9 @@
             pointer-events: none;
         }
     </style>
-    <link rel="stylesheet" href="assets/theme.css?v=20260914-photo2">
+    <link rel="stylesheet" href="assets/theme.css?v=20260914-railway">
     <link rel="stylesheet" href="assets/blindbox.css">
+    <link rel="stylesheet" href="assets/travel.css?v=1">
 </head>
 
 <body>
@@ -514,46 +515,70 @@
 
         <!-- 我的页面 -->
         <div id="page-profile" class="page page-content">
-            <div class="profile-card">
-                <i class="fas fa-hiking" style="font-size: 56px; color:#315e50;"></i>
-                <h3 style="margin: 12px 0 4px;">山野旅人</h3>
-                <div class="stats-grid">
-                    <div class="stat-cell">
-                        <div class="stat-number">8</div>
-                        <div>订单</div>
-                    </div>
-                    <div class="stat-cell">
-                        <div class="stat-number">14</div>
-                        <div>任务</div>
-                    </div>
-                    <div class="stat-cell">
-                        <div class="stat-number">11</div>
-                        <div>作品</div>
-                    </div>
-                    <div class="stat-cell">
-                        <div class="stat-number">27</div>
-                        <div>收藏</div>
-                    </div>
-                </div>
-                <div style="display: flex; gap: 12px; justify-content: center;">
-                    <button class="btn-sm" style="background:#2c3e66;">📚 我的收藏</button>
-                    <button class="btn-sm btn-outline">✍️ 我的作品</button>
-                </div>
+            <div class="assistant-heading">
+                <div class="eyebrow">YOUR JOURNEY STARTS HERE</div>
+                <h2 class="map-title">出游助手</h2>
+                <p class="sub">把心动变成出发。选一座城，收好你的旅行卡。</p>
             </div>
-            <div>
-                <div class="section-title"><i class="fas fa-receipt"></i> 近期订单</div>
-                <div class="order-item"><i class="fas fa-map-pin"></i> 黄山·迎客松盲盒 · 已完成</div>
-                <div class="order-item"><i class="fas fa-compass"></i> 合肥剧本游《包公奇案》 · 待体验</div>
-                <div class="order-item"><i class="fas fa-ticket-alt"></i> 芜湖方特乐园·数字门票</div>
+            <div class="assistant-layout">
+                <form class="assistant-panel assistant-form" id="travelForm">
+                    <h3>这次，想去哪儿？</h3>
+                    <label for="travelCity">目的地</label><select id="travelCity"></select>
+                    <label for="travelDays">留多少时间</label>
+                    <select id="travelDays"><option value="1">一日漫游</option><option value="2">两日慢游</option></select>
+                    <div class="assistant-actions">
+                        <button class="btn-sm" type="submit">查看路线</button>
+                        <button class="btn-sm btn-outline" type="button" id="useBlindboxCity" disabled>用盲盒目的地</button>
+                    </div>
+                    <p class="assistant-hint" id="travelFormHint">先开一次盲盒，也可以让惊喜决定下一站。</p>
+                </form>
+                <section class="assistant-panel" id="travelRoute" aria-label="路线灵感" aria-live="polite">
+                    <div class="route-kicker">A SLOW JOURNEY / 路线灵感</div>
+                    <h3 class="route-title" id="travelRouteTitle"></h3>
+                    <ol class="route-days" id="travelRouteDays"></ol>
+                    <p class="route-note" id="travelRouteNote"></p>
+                    <div class="assistant-actions">
+                        <button class="btn-sm" id="showTravelCard" type="button">制作旅行卡</button>
+                        <button class="btn-sm btn-outline" id="travelCityDetail" type="button">城市图文介绍</button>
+                    </div>
+                    <p class="assistant-hint">路线供出游参考；具体开放情况与交通请在出发前确认。</p>
+                </section>
             </div>
+            <section class="assistant-panel assistant-checklist">
+                <h3>出发前，轻轻打个勾</h3>
+                <div class="packing-items">
+                    <label><input type="checkbox">身份证件</label><label><input type="checkbox">手机与充电宝</label>
+                    <label><input type="checkbox">舒适的鞋</label><label><input type="checkbox">饮用水</label>
+                    <label><input type="checkbox">雨具与防晒用品</label><label><input type="checkbox">确认交通与开放情况</label>
+                </div>
+                <p class="assistant-hint">无需登录。勾选仅在本次页面内保留，旅行卡可截图保存到手机。</p>
+            </section>
         </div>
 
         <!-- 底部导航栏 -->
-        <div class="bottom-nav">
+        <div class="bottom-nav" id="bottomNav" style="--train-index: 0;">
+            <div class="railway-landscape" aria-hidden="true">
+                <img class="railway-painting" src="assets/railway-landscape.svg" alt="">
+                <span class="high-speed-train">
+                    <svg viewBox="0 0 180 36" focusable="false">
+                        <defs><linearGradient id="trainPearl" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".55" stop-color="#f6f6eb"/><stop offset="1" stop-color="#bccbc5"/></linearGradient></defs>
+                        <g fill="url(#trainPearl)" stroke="#607d72" stroke-width=".8">
+                            <path d="M3 23 9 11Q12 7 20 7H49V28H8Q2 28 3 23Z"/>
+                            <rect x="52" y="7" width="57" height="21" rx="3"/>
+                            <path d="M112 7H148Q161 9 176 23Q181 28 171 28H112Z"/>
+                        </g>
+                        <path d="M7 22H174" stroke="#b59049" stroke-width="2"/>
+                        <g fill="#294d50"><rect x="15" y="11" width="10" height="6" rx="1"/><rect x="29" y="11" width="10" height="6" rx="1"/><rect x="59" y="11" width="10" height="6" rx="1"/><rect x="73" y="11" width="10" height="6" rx="1"/><rect x="87" y="11" width="10" height="6" rx="1"/><rect x="119" y="11" width="10" height="6" rx="1"/><path d="M140 11H150Q158 13 163 18H140Z"/></g>
+                        <path d="M44 10V25M103 10V25" stroke="#93a79e"/>
+                        <path d="M15 29H39M65 29H96M123 29H151" stroke="#28483f" stroke-width="3" stroke-linecap="round"/>
+                        <path d="m77 6 6-4 8 4" stroke="#627971" fill="none"/>
+                    </svg>
+                </span>
+            </div>
             <button type="button" class="nav-item" data-page="home"><i class="fas fa-map-marked-alt"></i><span>首页</span></button>
             <button type="button" class="nav-item" data-page="script"><i class="fas fa-scroll"></i><span>剧本游</span></button>
             <button type="button" class="nav-item" data-page="blindbox"><i class="fas fa-gift"></i><span>盲盒</span></button>
-            <button type="button" class="nav-item" data-page="profile"><i class="fas fa-user"></i><span>我的</span></button>
+            <button type="button" class="nav-item" data-page="profile"><i class="fas fa-compass"></i><span>出游助手</span></button>
         </div>
     </div>
 
@@ -597,6 +622,16 @@
         </div>
     </div>
 
+    <div class="travel-card-mask" id="travelCardModal" role="dialog" aria-modal="true" aria-labelledby="travelCardTitle" hidden>
+        <article class="travel-card">
+            <header class="travel-card-header"><div class="eyebrow">ANHUI / 一张出发的邀请</div><h2 id="travelCardTitle"></h2><p id="travelCardSubtitle"></p></header>
+            <div class="travel-card-body"><ol class="route-days" id="travelCardDays"></ol><p class="travel-card-food" id="travelCardFood"></p></div>
+            <footer class="travel-card-footer">山水有约 · 漫游安徽</footer>
+        </article>
+        <p class="travel-card-help">截屏，带走你的旅行灵感 · 路线仅供参考</p>
+        <button class="btn-sm" id="closeTravelCard" type="button">返回出游助手</button>
+    </div>
+    <script src="assets/travel-assistant.js?v=1"></script>
     <script src="picture/cities.js"></script>
     <script src="assets/city-guides.js?v=20260914-expanded"></script>
     <script>
@@ -975,6 +1010,7 @@
 
                 setTimeout(() => {
                     blindboxState = "revealed";
+                    travelAssistant.refreshBlindbox();
                     document.getElementById("blindboxResultIcon").textContent = blindboxSelection.emoji;
                     document.getElementById("blindboxResultTitle").textContent = `下一站，${blindboxSelection.name}`;
                     document.getElementById("blindboxResultDesc").textContent = blindboxSelection.desc;
@@ -1008,10 +1044,24 @@
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active-page'));
             document.getElementById(`page-${pageId}`).classList.add('active-page');
-            document.querySelectorAll('.nav-item').forEach(item => {
+            const navItems = Array.from(document.querySelectorAll('.nav-item'));
+            navItems.forEach(item => {
                 if (item.getAttribute('data-page') === pageId) item.classList.add('active');
                 else item.classList.remove('active');
             });
+            const activeIndex = navItems.findIndex(item => item.getAttribute('data-page') === pageId);
+            if (activeIndex >= 0) {
+                const bottomNav = document.getElementById('bottomNav');
+                const previousIndex = Number(bottomNav.dataset.activeIndex || 0);
+                if (activeIndex !== previousIndex) bottomNav.style.setProperty('--train-direction', activeIndex < previousIndex ? -1 : 1);
+                bottomNav.style.setProperty('--train-index', activeIndex);
+                bottomNav.dataset.activeIndex = activeIndex;
+                navItems.forEach((item, index) => {
+                    if (index === activeIndex) item.setAttribute('aria-current', 'page');
+                    else item.removeAttribute('aria-current');
+                });
+            }
+            if (pageId === 'profile') travelAssistant.refreshBlindbox();
             // 切回首页时调整地图尺寸，热点信息仅在初始化时渲染。
             if (pageId === 'home') {
                 setTimeout(() => {
@@ -1045,6 +1095,7 @@
         });
 
         // 全部初始化
+        const travelAssistant = window.initTravelAssistant(provincesData, showProvinceDetail, () => blindboxState === 'revealed' ? blindboxSelection : null);
         initAnhuiMap();
         renderRanking();
         renderDiscuss();

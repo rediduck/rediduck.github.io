@@ -1,0 +1,58 @@
+/* Mountain railway and the stateless travel companion. */
+.bottom-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 66px 0 max(8px, env(safe-area-inset-bottom)); background: #fffef8; border-top: 1px solid #e2e7da; }
+.railway-landscape { height: 66px; overflow: hidden; background: #eff2e9; }
+.railway-painting { width: 100%; height: 100%; display: block; object-fit: fill; }
+.high-speed-train { width: 88px; height: 19px; bottom: 9px; filter: drop-shadow(0 2px 1px #203e382a); transition: left 1.1s cubic-bezier(.45, 0, .18, 1); }
+.high-speed-train svg { transform: scaleX(var(--train-direction, 1)); }
+.bottom-nav .nav-item { margin: 2px 6px 0; padding: 6px 0; gap: 3px; border-radius: 10px; font-size: 11px; color: #78877b; }
+.bottom-nav .nav-item.active { background: transparent; color: #244c3b; transform: none; }
+.bottom-nav .nav-item::before { content: ''; position: absolute; top: -9px; width: 5px; height: 5px; border: 1px solid #8d9c86; border-radius: 50%; background: #fffdf4; transition: background .25s, box-shadow .25s; }
+.bottom-nav .nav-item.active::before { background: #b19454; border-color: #b19454; box-shadow: 0 0 0 3px #b1945420; }
+.bottom-nav .nav-item i { font-size: 17px; }
+.assistant-heading { margin: 4px 0 24px; }
+.assistant-heading .map-title { font-weight: 400; font-size: 32px; }
+.assistant-layout { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 22px; align-items: start; }
+.assistant-panel { background: #fffefa; border: 1px solid var(--line); border-radius: 22px; padding: 24px; }
+.assistant-panel h3 { margin: 0 0 18px; font-size: 17px; }
+.assistant-form label { display: block; font-size: 12px; margin: 16px 0 7px; color: #617362; }
+.assistant-form select { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid #d6dfce; border-radius: 10px; background: #f5f6ee; font: inherit; color: var(--ink); }
+.assistant-form select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.assistant-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+.assistant-actions button { min-height: 42px; }
+.assistant-actions button:disabled { opacity: .45; cursor: default; }
+.assistant-hint { font-size: 11px; color: #6e7a6a; line-height: 1.8; margin: 14px 0 0; }
+.route-kicker { font-size: 10px; color: var(--gold); letter-spacing: 2px; }
+.route-title { font-family: 'ZCOOL XiaoWei', serif; font-size: 28px; font-weight: 400; margin: 8px 0 16px; }
+.route-days { list-style: none; margin: 0; padding: 0; }
+.route-days li { position: relative; padding: 0 0 22px 22px; border-left: 1px solid #ccd8c4; margin-left: 5px; }
+.route-days li:last-child { padding-bottom: 0; border-left-color: transparent; }
+.route-days li::before { content: ''; position: absolute; top: 5px; left: -4px; width: 7px; height: 7px; background: #a78c52; border-radius: 50%; }
+.route-days strong { display: block; font-size: 12px; color: #768469; margin-bottom: 5px; font-weight: 500; }
+.route-days p { font-size: 14px; margin: 0; line-height: 1.9; }
+.route-note { background: #f0f3e9; border-radius: 12px; padding: 12px 14px; color: #64725f; font-size: 12px; line-height: 1.85; margin-top: 22px; }
+.assistant-checklist { margin-top: 22px; }
+.packing-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.packing-items label { display: flex; align-items: center; gap: 8px; min-height: 44px; font-size: 13px; cursor: pointer; }
+.packing-items input { accent-color: #315e50; width: 17px; height: 17px; }
+.packing-items label:has(input:checked) { color: #879080; text-decoration: line-through; }
+.travel-card-mask { position: fixed; inset: 0; z-index: 2100; background: #152c29c9; backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; gap: 12px; overflow-y: auto; }
+.travel-card-mask[hidden] { display: none; }
+.travel-card { width: min(100%, 350px); flex-shrink: 0; background: #fffdf3; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 60px #0004; }
+.travel-card-header { padding: 22px 24px; background: #254e40; color: #f4edd9; position: relative; }
+.travel-card-header .eyebrow { color: #ccba86; font-size: 9px; }
+.travel-card-header h2 { font-family: 'ZCOOL XiaoWei', serif; font-size: 32px; font-weight: 400; margin: 8px 0; }
+.travel-card-header p { font-size: 12px; margin: 0; color: #cbd5c0; }
+.travel-card-body { padding: 22px 24px; }
+.travel-card-body .route-days p { font-size: 13px; }
+.travel-card-food { font-size: 12px; color: #617361; padding-top: 16px; border-top: 1px dashed #d4c9ad; margin: 18px 0 0; line-height: 1.8; }
+.travel-card-footer { padding: 12px; text-align: center; letter-spacing: 3px; font-size: 10px; color: #88774e; background: #f2f0e3; }
+.travel-card-help { margin: 0; font-size: 12px; color: #fff9e5; text-align: center; }
+@media (max-width: 799px) {
+    .bottom-nav { padding-left: 0; padding-right: 0; }
+    .assistant-layout { grid-template-columns: 1fr; gap: 16px; }
+    .assistant-panel { padding: 20px; }
+    .packing-items { grid-template-columns: repeat(2, 1fr); }
+    .high-speed-train { width: min(82px, 21vw); }
+}
+@media (max-height: 580px) { .travel-card-mask { justify-content: flex-start; } }
+@media (prefers-reduced-motion: reduce) { .high-speed-train { transition: none; } }

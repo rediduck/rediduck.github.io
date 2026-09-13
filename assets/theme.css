@@ -30,10 +30,38 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
 }
 .page-content { padding: 32px; min-height: 0; }
 .page-content::-webkit-scrollbar-thumb { background: #9aac98; }
-.bottom-nav { padding: 12px 20px max(12px, env(safe-area-inset-bottom)); flex-shrink: 0; }
-.nav-item { border: 0; background: transparent; padding: 8px 24px; border-radius: 16px; color: #6e7d76; }
-.nav-item.active { color: #315e50; background: #edf2e9; text-shadow: none; transform: none; }
+.bottom-nav {
+    position: relative;
+    isolation: isolate;
+    padding: 49px 20px max(10px, env(safe-area-inset-bottom));
+    flex-shrink: 0;
+    overflow: hidden;
+    background: linear-gradient(180deg, #edf2e9 0 49px, #fffefaee 49px);
+}
+.nav-item { position: relative; z-index: 3; border: 0; background: transparent; padding: 7px 24px; border-radius: 14px; color: #758078; }
+.nav-item.active { color: #24483d; background: #e3ebe0; text-shadow: none; transform: translateY(-1px); }
 .nav-item i { font-size: 20px; }
+.railway-landscape { position: absolute; z-index: 1; inset: 0 0 auto; height: 52px; pointer-events: none; }
+.mountain { position: absolute; inset: auto 0 10px; height: 42px; transform-origin: bottom; }
+.mountain-far { background: #aebfab; opacity: .58; clip-path: polygon(0 84%, 8% 47%, 15% 72%, 24% 26%, 33% 70%, 42% 42%, 50% 80%, 61% 18%, 70% 66%, 79% 35%, 89% 74%, 96% 48%, 100% 63%, 100% 100%, 0 100%); }
+.mountain-near { bottom: 7px; height: 31px; background: #63806e; opacity: .72; clip-path: polygon(0 78%, 11% 29%, 20% 73%, 31% 48%, 40% 84%, 52% 22%, 63% 72%, 75% 38%, 84% 77%, 94% 31%, 100% 58%, 100% 100%, 0 100%); }
+.rail-line { position: absolute; left: 0; right: 0; bottom: 6px; height: 4px; border-top: 1px solid #8c7956; border-bottom: 1px solid #8c7956; background: repeating-linear-gradient(90deg, transparent 0 12px, #7d6948 12px 14px); }
+.high-speed-train {
+    position: absolute;
+    z-index: 2;
+    left: calc((100% / 4) * var(--train-index) + (100% / 8));
+    bottom: 7px;
+    width: 66px;
+    height: 24px;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 3px 3px #203e3838);
+    transition: left .72s cubic-bezier(.22, 1, .36, 1);
+}
+.high-speed-train svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.train-body { fill: #f8f5e9; stroke: #315e50; stroke-width: 1.5; }
+.train-window { fill: #315e50; }
+.train-stripe { fill: #b18d4f; }
+.high-speed-train circle { fill: #263d37; }
 .brand-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .eyebrow { color: var(--gold); font-size: 11px; letter-spacing: 3px; margin-bottom: 8px; }
 .brand-seal { border: 1px solid var(--gold); color: var(--gold); padding: 8px; font-family: 'ZCOOL XiaoWei', serif; writing-mode: vertical-rl; letter-spacing: 4px; border-radius: 6px; flex-shrink: 0; }
@@ -108,7 +136,8 @@ footer { color: var(--muted); letter-spacing: 2px; }
     .app-container { height: 100dvh; min-height: 0; border: 0; border-radius: 0; }
     .page-content { padding: 24px 18px; }
     #anhuiMapCanvas { height: clamp(340px, 52dvh, 400px); }
-    .nav-item { padding: 8px 16px; }
+    .bottom-nav { padding-left: 8px; padding-right: 8px; }
+    .nav-item { padding: 7px 12px; }
     .map-header .map-title { font-size: 30px; }
     .map-tip { padding: 0; background: transparent; border: 0; font-size: 11px; }
     .map-toolbar { padding: 4px 0 12px; }
